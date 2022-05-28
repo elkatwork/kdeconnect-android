@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,10 +25,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import org.kde.kdeconnect.BackgroundService;
+import org.kde.kdeconnect.Plugins.SystemVolumePlugin.Sink;
+import org.kde.kdeconnect.Plugins.SystemVolumePlugin.SystemVolumePlugin;
 import org.kde.kdeconnect.UserInterface.ThemeUtil;
 import org.kde.kdeconnect_tp.R;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class MousePadActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, MousePadGestureDetector.OnGestureListener {
     private String deviceId;
@@ -54,6 +58,8 @@ public class MousePadActivity extends AppCompatActivity implements GestureDetect
     private PointerAccelerationProfile.MouseDelta mouseDelta; // to be reused on every touch move event
 
     private KeyListenerView keyListenerView;
+
+    private SystemVolumePlugin volumePlugin;
 
     enum ClickType {
         LEFT, RIGHT, MIDDLE, NONE;
@@ -95,6 +101,8 @@ public class MousePadActivity extends AppCompatActivity implements GestureDetect
 
         keyListenerView = findViewById(R.id.keyListener);
         keyListenerView.setDeviceId(deviceId);
+
+        volumePlugin = new SystemVolumePlugin();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean(getString(R.string.mousepad_scroll_direction), false)) {
@@ -165,6 +173,9 @@ public class MousePadActivity extends AppCompatActivity implements GestureDetect
             }
         });
 
+        BackgroundService.RunWithPlugin(this, deviceId, SystemVolumePlugin.class, plugin -> {
+            plugin.requestSinkList();
+        });
     }
 
     @Override
@@ -401,6 +412,47 @@ public class MousePadActivity extends AppCompatActivity implements GestureDetect
     public boolean onSupportNavigateUp() {
         super.onBackPressed();
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                updateDefaultSinkVolume(5);
+                break;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                updateDefaultSinkVolume(-5);
+                break;
+        }
+        return true;
+    }
+
+    private void updateDefaultSinkVolume(int percent) {
+        if (percent < -100) percent = -100;
+        if (percent > 100) percent = 100;
+
+        int finalPercent = percent;
+        BackgroundService.RunWithPlugin(this, deviceId, SystemVolumePlugin.class, plugin -> {
+            Optional<Sink> foundSink = plugin.getSinks().stream().filter(Sink::isDefault).findFirst();
+            if (foundSink.isPresent()) {
+                Sink defaultSink = foundSink.get();
+
+                int step = defaultSink.getMaxVolume() * finalPercent / 100;
+
+                int newVolume = defaultSink.getVolume() + step;
+
+                if (newVolume > defaultSink.getMaxVolume()) {
+                    newVolume = defaultSink.getMaxVolume();
+                } else if (newVolume < 0) {
+                    newVolume = 0;
+                }
+
+                if (defaultSink.getVolume() == newVolume) return;
+
+                int finalNewVolume = newVolume;
+                    plugin.sendVolume(defaultSink.getName(), finalNewVolume);
+            }
+        });
     }
 }
 

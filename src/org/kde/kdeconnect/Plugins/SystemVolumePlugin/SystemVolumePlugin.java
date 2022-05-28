@@ -87,7 +87,7 @@ public class SystemVolumePlugin extends Plugin {
         return true;
     }
 
-    void sendVolume(String name, int volume) {
+    public void sendVolume(String name, int volume) {
         NetworkPacket np = new NetworkPacket(PACKET_TYPE_SYSTEMVOLUME_REQUEST);
         np.set("volume", volume);
         np.set("name", name);
@@ -108,7 +108,7 @@ public class SystemVolumePlugin extends Plugin {
         device.sendPacket(np);
     }
 
-    void requestSinkList() {
+    public void requestSinkList() {
         NetworkPacket np = new NetworkPacket(PACKET_TYPE_SYSTEMVOLUME_REQUEST);
         np.set("requestSinks", true);
         device.sendPacket(np);
@@ -134,7 +134,7 @@ public class SystemVolumePlugin extends Plugin {
         return new String[]{PACKET_TYPE_SYSTEMVOLUME_REQUEST};
     }
 
-    Collection<Sink> getSinks() {
+    public Collection<Sink> getSinks() {
         return sinks.values();
     }
 

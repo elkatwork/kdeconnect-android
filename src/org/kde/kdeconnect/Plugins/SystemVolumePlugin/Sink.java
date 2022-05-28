@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-class Sink {
+public class Sink {
 
     interface UpdateListener {
         void updateSink(@NonNull Sink sink);
@@ -39,7 +39,7 @@ class Sink {
         enabled = obj.optBoolean("enabled", false);
     }
 
-    int getVolume() {
+    public int getVolume() {
         return volume;
     }
 
@@ -55,7 +55,7 @@ class Sink {
         return description;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -70,7 +70,7 @@ class Sink {
         }
     }
 
-    boolean isDefault() {
+    public boolean isDefault() {
         return enabled;
     }
 
@@ -88,7 +88,7 @@ class Sink {
         }
     }
 
-    int getMaxVolume() {
+    public int getMaxVolume() {
         return maxVolume;
     }
 
