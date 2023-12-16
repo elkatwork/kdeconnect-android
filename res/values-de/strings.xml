@@ -60,6 +60,8 @@
   <string name="mousepad_mouse_buttons_title">Maustasten anzeigen</string>
   <string name="mousepad_acceleration_profile_settings_title">Zeigerbeschleunigung einstellen</string>
   <string name="mousepad_scroll_direction_title">Bildlaufrichtung umkehren</string>
+  <string name="mousepad_denon_receiver_address_desc">Hostname oder IP-Adresse deines Denon AV Receivers</string>
+  <string name="mousepad_denon_receiver_address_title">AV Receiver Adresse</string>
   <string name="gyro_mouse_enabled_title">Gyroskop-Maus aktivieren</string>
   <string name="gyro_mouse_sensitivity_title">Empfindlichkeit des Gyroskops einstellen</string>
   <string-array name="mousepad_tap_entries">

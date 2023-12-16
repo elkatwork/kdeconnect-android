@@ -17,16 +17,28 @@ import org.kde.kdeconnect.NetworkPacket;
 import org.kde.kdeconnect.Plugins.Plugin;
 import org.kde.kdeconnect.Plugins.PluginFactory;
 import org.kde.kdeconnect.UserInterface.PluginSettingsFragment;
+import org.kde.kdeconnect.async.BackgroundJob;
+import org.kde.kdeconnect.async.BackgroundJobHandler;
 import org.kde.kdeconnect_tp.R;
 
 @PluginFactory.LoadablePlugin
 public class MousePadPlugin extends Plugin {
 
-    //public final static String PACKET_TYPE_MOUSEPAD = "kdeconnect.mousepad";
+    // public final static String PACKET_TYPE_MOUSEPAD = "kdeconnect.mousepad";
     public final static String PACKET_TYPE_MOUSEPAD_REQUEST = "kdeconnect.mousepad.request";
     private final static String PACKET_TYPE_MOUSEPAD_KEYBOARDSTATE = "kdeconnect.mousepad.keyboardstate";
 
+    public final static String RECEIVER_CMD_VOLUME_UP = "MVUP";
+    public final static String RECEIVER_CMD_VOLUME_DOWN = "MVDOWN";
+
     private boolean keyboardEnabled = true;
+    private final BackgroundJobHandler backgroundJobHandler;
+    private final Callback callback;
+
+    public MousePadPlugin() {
+        backgroundJobHandler = BackgroundJobHandler.newFixedThreadPoolBackgroundJobHander(1);
+        callback = new Callback();
+    }
 
     @Override
     public boolean onPacketReceived(@NonNull NetworkPacket np) {
@@ -75,12 +87,12 @@ public class MousePadPlugin extends Plugin {
 
     @Override
     public @NonNull String[] getSupportedPacketTypes() {
-        return new String[]{PACKET_TYPE_MOUSEPAD_KEYBOARDSTATE};
+        return new String[] { PACKET_TYPE_MOUSEPAD_KEYBOARDSTATE };
     }
 
     @Override
     public @NonNull String[] getOutgoingPacketTypes() {
-        return new String[]{PACKET_TYPE_MOUSEPAD_REQUEST};
+        return new String[] { PACKET_TYPE_MOUSEPAD_REQUEST };
     }
 
     @Override
@@ -93,7 +105,8 @@ public class MousePadPlugin extends Plugin {
         if (np == null) {
             np = new NetworkPacket(PACKET_TYPE_MOUSEPAD_REQUEST);
         } else {
-            // TODO: In my tests we never get here. Decide if it's worth keeping the logic to replace unsent packets.
+            // TODO: In my tests we never get here. Decide if it's worth keeping the logic
+            // to replace unsent packets.
             dx += np.getInt("dx");
             dy += np.getInt("dx");
         }
@@ -150,4 +163,20 @@ public class MousePadPlugin extends Plugin {
         return keyboardEnabled;
     }
 
+    public void sendReceiverCommand(String host, String cmd) {
+        DenonAvrCmdJob job = new DenonAvrCmdJob(device, callback, host, cmd);
+        backgroundJobHandler.runJob(job);
+    }
+
+    private class Callback implements BackgroundJob.Callback<Void> {
+        @Override
+        public void onResult(@NonNull BackgroundJob job, Void result) {
+
+        }
+
+        @Override
+        public void onError(@NonNull BackgroundJob job, @NonNull Throwable error) {
+
+        }
+    }
 }

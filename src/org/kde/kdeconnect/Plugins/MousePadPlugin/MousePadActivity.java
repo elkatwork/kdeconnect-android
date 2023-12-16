@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -99,19 +100,19 @@ public class MousePadActivity
     public void onSensorChanged(SensorEvent event) {
         float[] values = event.values;
 
-        float X = -values[2] * 70 * (gyroscopeSensitivity/100.0f);
-        float Y = -values[0] * 70 * (gyroscopeSensitivity/100.0f);
+        float X = -values[2] * 70 * (gyroscopeSensitivity / 100.0f);
+        float Y = -values[0] * 70 * (gyroscopeSensitivity / 100.0f);
 
         if (X < 0.25 && X > -0.25) {
             X = 0;
         } else {
-            X = X * (gyroscopeSensitivity/100.0f);
+            X = X * (gyroscopeSensitivity / 100.0f);
         }
 
         if (Y < 0.25 && Y > -0.25) {
             Y = 0;
         } else {
-            Y = Y * (gyroscopeSensitivity/100.0f);
+            Y = Y * (gyroscopeSensitivity / 100.0f);
         }
 
         final float nX = X;
@@ -156,8 +157,9 @@ public class MousePadActivity
 
         applyPrefs();
 
-        //Technically xdpi and ydpi should be handled separately,
-        //but since ydpi is usually almost equal to xdpi, only xdpi is used for the multiplier.
+        // Technically xdpi and ydpi should be handled separately,
+        // but since ydpi is usually almost equal to xdpi, only xdpi is used for the
+        // multiplier.
         displayDpiMultiplier = StandardDpi / getResources().getDisplayMetrics().xdpi;
 
         final View decorView = getWindow().getDecorView();
@@ -180,7 +182,8 @@ public class MousePadActivity
         applyPrefs();
 
         if (allowGyro && !gyroEnabled) {
-            mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
+            mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                    SensorManager.SENSOR_DELAY_GAME);
             gyroEnabled = true;
         }
 
@@ -331,7 +334,7 @@ public class MousePadActivity
 
     @Override
     public void onShowPress(MotionEvent e) {
-        //From GestureDetector, left empty
+        // From GestureDetector, left empty
     }
 
     @Override
@@ -346,7 +349,8 @@ public class MousePadActivity
 
             accumulatedDistanceY += distanceY;
 
-            if (accumulatedDistanceY > MinDistanceToSendGenericScroll || accumulatedDistanceY < -MinDistanceToSendGenericScroll) {
+            if (accumulatedDistanceY > MinDistanceToSendGenericScroll
+                    || accumulatedDistanceY < -MinDistanceToSendGenericScroll) {
                 sendScroll(accumulatedDistanceY);
                 accumulatedDistanceY = 0;
             }
@@ -459,9 +463,9 @@ public class MousePadActivity
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (prefsApplied) prefsApplied = false;
+        if (prefsApplied)
+            prefsApplied = false;
     }
-
 
     private void sendLeftClick() {
         MousePadPlugin plugin = KdeConnect.getInstance().getDevicePlugin(deviceId, MousePadPlugin.class);
@@ -512,7 +516,8 @@ public class MousePadActivity
     }
 
     private void applyPrefs() {
-        if (prefsApplied) return;
+        if (prefsApplied)
+            return;
 
         if (prefs.getBoolean(getString(R.string.mousepad_scroll_direction), false)) {
             scrollDirection = -1;
@@ -521,7 +526,8 @@ public class MousePadActivity
         }
 
         allowGyro = isGyroSensorAvailable() && prefs.getBoolean(getString(R.string.gyro_mouse_enabled), false);
-        if (allowGyro) gyroscopeSensitivity = prefs.getInt(getString(R.string.gyro_mouse_sensitivity), 100);
+        if (allowGyro)
+            gyroscopeSensitivity = prefs.getInt(getString(R.string.gyro_mouse_sensitivity), 100);
 
         String singleTapSetting = prefs.getString(getString(R.string.mousepad_single_tap_key),
                 getString(R.string.mousepad_default_single));
@@ -580,5 +586,27 @@ public class MousePadActivity
         super.onBackPressed();
         return true;
     }
-}
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        MousePadPlugin plugin = KdeConnect.getInstance().getDevicePlugin(deviceId, MousePadPlugin.class);
+        if (plugin == null) {
+            finish();
+            return true;
+        }
+
+        final String receiverAddress = prefs.getString(getString(R.string.mousepad_denon_receiver_address),
+                getString(R.string.mousepad_default_denon_receiver_address));
+
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                plugin.sendReceiverCommand(receiverAddress, MousePadPlugin.RECEIVER_CMD_VOLUME_UP);
+                break;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                plugin.sendReceiverCommand(receiverAddress, MousePadPlugin.RECEIVER_CMD_VOLUME_DOWN);
+                break;
+        }
+
+        return true;
+    }
+}

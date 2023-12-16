@@ -83,6 +83,12 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
         android:key="@string/mousepad_mouse_buttons_enabled_pref"
         android:title="@string/mousepad_mouse_buttons_title" />
 
+    <EditTextPreference
+        android:dialogMessage="@string/mousepad_denon_receiver_address_desc"
+        android:defaultValue="172.23.42.82"
+        android:key="@string/mousepad_denon_receiver_address"
+        android:title="@string/mousepad_denon_receiver_address_title" />
+
 
     <org.kde.kdeconnect.Helpers.LongSummaryPreferenceCategory
         android:key="@string/sendkeystrokes_pref_category"

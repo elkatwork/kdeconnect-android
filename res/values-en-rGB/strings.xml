@@ -60,6 +60,8 @@
   <string name="mousepad_mouse_buttons_title">Show mouse buttons</string>
   <string name="mousepad_acceleration_profile_settings_title">Set pointer acceleration</string>
   <string name="mousepad_scroll_direction_title">Reverse Scrolling Direction</string>
+  <string name="mousepad_denon_receiver_address_desc">Hostname or IP address of your Denon AV receiver</string>
+  <string name="mousepad_denon_receiver_address_title">AV Receiver address</string>
   <string name="gyro_mouse_enabled_title">Enable gyroscope mouse</string>
   <string name="gyro_mouse_sensitivity_title">Gyroscope sensitivity</string>
   <string-array name="mousepad_tap_entries">

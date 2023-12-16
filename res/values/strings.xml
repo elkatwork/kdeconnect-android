@@ -82,6 +82,9 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
     <string name="mousepad_scroll_direction" translatable="false">mousepad_scroll_direction</string>
     <string name="gyro_mouse_enabled" translatable="false">gyro_mouse_enabled</string>
     <string name="mousepad_mouse_buttons_enabled_pref" translatable="false">mouse_buttons_enabled</string>
+    <string name="mousepad_denon_receiver_address_desc">Hostname or IP address of your Denon AV receiver</string>
+    <string name="mousepad_denon_receiver_address_title">AV Receiver address</string>
+    <string name="mousepad_denon_receiver_address" translatable="false">mousepad_denon_receiver_address</string>
     <string name="gyro_mouse_enabled_title">Enable gyroscope mouse</string>
     <string name="gyro_mouse_sensitivity_title">Gyroscope sensitivity</string>
     <string name="gyro_mouse_sensitivity" translatable="false">gyro_mouse_sensitivity</string>
@@ -96,6 +99,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
     <string name="mousepad_default_triple" translatable="false">middle</string>
     <string name="mousepad_default_sensitivity" translatable="false">default</string>
     <string name="mousepad_default_acceleration_profile" translatable="false">medium</string>
+    <string name="mousepad_default_denon_receiver_address" translatable="false">192.168.0.2</string>
     <string-array name="mousepad_tap_values" translatable="false">
         <item>left</item>
         <item>right</item>

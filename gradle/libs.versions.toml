@@ -2,7 +2,7 @@
 accompanistThemeadapterMaterial3 = "0.32.0"
 activityCompose = "1.7.2"
 androidDesugarJdkLibs = "2.0.3"
-androidGradlePlugin = "8.1.1"
+androidGradlePlugin = "8.2.0"
 androidSmsmms = "kdeconnect-1-21-0"
 appcompat = "1.6.1"
 bcpkixJdk15on = "1.70"
@@ -10,11 +10,12 @@ classindex = "3.13"
 commonsCollections4 = "4.4"
 commonsIo = "2.11.0"
 commonsLang3 = "3.12.0"
+commonsNet = "3.10.0"
 constraintlayoutCompose = "1.0.1"
 coreKtx = "1.10.1"
 disklrucache = "2.0.2"
 documentfile = "1.0.1"
-gradle = "8.1.1"
+gradle = "8.2.0"
 gridlayout = "1.0.0"
 jsonassert = "1.5.1"
 junit = "4.13.2"
@@ -66,6 +67,7 @@ classindex = { module = "org.atteo.classindex:classindex", version.ref = "classi
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3" }
+commons-net = { module = "commons-net:commons-net", version.ref = "commonsNet" }
 disklrucache = { module = "com.jakewharton:disklrucache", version.ref = "disklrucache" }
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 jsonassert = { module = "org.skyscreamer:jsonassert", version.ref = "jsonassert" }
