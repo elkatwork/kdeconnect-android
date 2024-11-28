@@ -18,7 +18,6 @@
   <string name="pref_plugin_clipboard_sent">Mübadilə buferini göndərmək</string>
   <string name="pref_plugin_mousepad">Məsafədən giriş</string>
   <string name="pref_plugin_mousepad_desc">Telefon və Planşetinizi toxunma paneli və klaviatura kimi istifadə edin</string>
-  <string name="pref_plugin_presenter">Məsafədən slayd göstərişi</string>
   <string name="pref_plugin_presenter_desc">Cihazınızı təqdimatda slaydları dəyişmək üçün istifadə edin</string>
   <string name="pref_plugin_remotekeyboard">Məsafədən düyməyə basmanı almaq</string>
   <string name="pref_plugin_remotekeyboard_desc">Düyməyə basmanı məsafədəki qurğudan almaq</string>
@@ -116,11 +115,9 @@
   <string name="error_canceled_by_user">İstifadəçi ləğv etdi</string>
   <string name="error_canceled_by_other_peer">Digər istifadəçi ləğv etdi</string>
   <string name="encryption_info_title">Şifrələmə məlumatı</string>
-  <string name="encryption_info_msg_no_ssl">Digər cihaz köhnə şifrələmə metodu istifadə edən KDE Connect\'in sonuncu versiyasını istifadə etmir.</string>
   <string name="my_device_fingerprint">Cihazınızın sertifikatının SHA256 şifrə izi:</string>
   <string name="remote_device_fingerprint">Uzaq cihaz sertifikatının SHA256 şifrə izi:</string>
   <string name="pair_requested">Qoşulma soruşuldu</string>
-  <string name="pairing_request_from">%1s tərəfindən qoşulma sorğusu</string>
   <plurals name="incoming_file_title">
     <item quantity="one">%1$d fayl %2$s\'dn alınır</item>
     <item quantity="other">%1$d fayl %2$s\'dn alınır</item>
@@ -186,7 +183,6 @@
   <string name="mpris_notifications_explanation">Bildirişlər çəkməcəsində məsafədəki medianı göstərmək üçün bildiriş icazələri lazımdır</string>
   <string name="mpris_notification_settings_title">Media idarəetmə bildirişlərini göstərmək</string>
   <string name="mpris_notification_settings_summary">KDE Connect açmadan media oynadıcınızın idarəsinə icazə vermək</string>
-  <string name="share_to">Paylaşmaq...</string>
   <string name="protocol_version_newer">Bu cihaz yeni protokol versiyası istifadə edir</string>
   <string name="plugin_settings_with_name">%s ayarları</string>
   <string name="invalid_device_name">Səhv cihaz adı</string>
@@ -263,7 +259,6 @@
   <string name="telephony_pref_blocked_title">Əngəllənmiş nömrələr</string>
   <string name="telephony_pref_blocked_dialog_desc">Bu nömrədən SMS və zənglər göstərilməsin. Hər sətirdə bir nömrə göstərin</string>
   <string name="mpris_coverart_description">Mövcud medianın üz qabığı</string>
-  <string name="device_icon_description">Cihaın nişanı</string>
   <string name="settings_icon_description">Ayarlar nişanı</string>
   <string name="presenter_fullscreen">Tam_Ekran</string>
   <string name="presenter_exit">Təqdimatdan çıxış</string>

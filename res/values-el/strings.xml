@@ -17,7 +17,6 @@
   <string name="pref_plugin_clipboard_sent">Το πρόχειρο εστάλη</string>
   <string name="pref_plugin_mousepad">Απομακρυσμένη είσοδος στοιχείων</string>
   <string name="pref_plugin_mousepad_desc">Χρήση του τηλεφώνου ή της ταμπλέτας σας ως επιφάνεια αφής και πληκτρολόγιο</string>
-  <string name="pref_plugin_presenter">Απομακρυσμένος έλεγχος παρουσίασης διαφανειών</string>
   <string name="pref_plugin_presenter_desc">Χρησιμοποιήστε τη συσκευή σας για να αλλάξετε διαφάνειες σε μία παρουσίαση</string>
   <string name="pref_plugin_remotekeyboard">Λήψη απομακρυσμένων πληκτρολογήσεων</string>
   <string name="pref_plugin_remotekeyboard_desc">Λήψη συμβάντων πληκτρολόγησης από απομακρυσμένες συσκευές</string>
@@ -101,11 +100,9 @@
   <string name="error_canceled_by_user">Ακυρώθηκε από τον χρήστη</string>
   <string name="error_canceled_by_other_peer">Ακυρώθηκε από άλλον χρήστη</string>
   <string name="encryption_info_title">Πληροφορίες κρυπτογράφησης</string>
-  <string name="encryption_info_msg_no_ssl">Η άλλη συσκευή δεν χρησιμοποιεί μια πρόσφατη έκδοση του KDE Connect, θα χρησιμοποιηθεί η παλαιά μέθοδος κρυπτογράφησης.</string>
   <string name="my_device_fingerprint">Το ίχνος SHA256 του πιστοποιητικού της συσκευής σας είναι:</string>
   <string name="remote_device_fingerprint">Το ίχνος SHA256 του πιστοποιητικού της απομακρυσμένης συσκευής είναι:</string>
   <string name="pair_requested">Ζητήθηκε σύζευξη</string>
-  <string name="pairing_request_from">Αίτημα σύζευξης από %1s</string>
   <plurals name="incoming_file_title">
     <item quantity="one">Ελήφθη %1$d αρχείο από %2$s`</item>
     <item quantity="other">Ελήφθησαν %1$d αρχεία από %2$s</item>
@@ -170,7 +167,6 @@
   </string-array>
   <string name="mpris_notification_settings_title">Εμφάνιση ειδοποίησης κονσόλας πολυμέσων</string>
   <string name="mpris_notification_settings_summary">Να επιτρέπεται ο έλεγχος των αναπαραφωγέων πολυμέσων χωρίς άνοιγμα του KDE Connect</string>
-  <string name="share_to">Διαμοιρασμός με…</string>
   <string name="protocol_version_newer">Η συσκευή αυτή χρησιμοποιεί νεότερη έκδοση πρωτοκόλλου</string>
   <string name="plugin_settings_with_name">%s ρυθμίσεις</string>
   <string name="invalid_device_name">Μη έγκυρο όνομα συσκευής</string>
@@ -239,7 +235,6 @@
   <string name="telephony_pref_blocked_title">Αριθμοί σε φραγή</string>
   <string name="telephony_pref_blocked_dialog_desc">Να μην εμφανίζονται κλήσεις ή SMS από αυτούς τους αριθμούς. Καθορίστε έναν αριθμό ανά γραμμή</string>
   <string name="mpris_coverart_description">Καλλιτεχνικό εξώφυλλο των πολυμέσων</string>
-  <string name="device_icon_description">Εικονίδιο συσκευής</string>
   <string name="settings_icon_description">Εικονίδιο ρυθμίσεων</string>
   <string name="presenter_fullscreen">Πλήρης οθόνη</string>
   <string name="presenter_exit">Έξοδος από την παρουσίαση</string>

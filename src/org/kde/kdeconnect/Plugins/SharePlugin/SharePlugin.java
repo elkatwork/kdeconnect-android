@@ -6,11 +6,12 @@
 
 package org.kde.kdeconnect.Plugins.SharePlugin;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.Manifest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,11 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.LocusIdCompat;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
+import androidx.preference.PreferenceManager;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,15 +37,19 @@ import org.kde.kdeconnect.Helpers.IntentHelper;
 import org.kde.kdeconnect.NetworkPacket;
 import org.kde.kdeconnect.Plugins.Plugin;
 import org.kde.kdeconnect.Plugins.PluginFactory;
+import org.kde.kdeconnect.UserInterface.MainActivity;
 import org.kde.kdeconnect.UserInterface.PluginSettingsFragment;
 import org.kde.kdeconnect.async.BackgroundJob;
 import org.kde.kdeconnect.async.BackgroundJobHandler;
 import org.kde.kdeconnect_tp.R;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A Plugin for sharing and receiving files and uris.
@@ -67,10 +77,64 @@ public class SharePlugin extends Plugin {
     private CompositeUploadFileJob uploadFileJob;
     private final Callback receiveFileJobCallback;
 
+    public static final String KEY_UNREACHABLE_URL_LIST = "key_unreachable_url_list";
+    private SharedPreferences mSharedPrefs;
+
     public SharePlugin() {
-        backgroundJobHandler = BackgroundJobHandler.newFixedThreadPoolBackgroundJobHander(5);
+        backgroundJobHandler = BackgroundJobHandler.newFixedThreadPoolBackgroundJobHandler(5);
         handler = new Handler(Looper.getMainLooper());
         receiveFileJobCallback = new Callback();
+    }
+
+    @Override
+    public boolean onCreate() {
+        super.onCreate();
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        Intent shortcutIntent = new Intent(context, MainActivity.class);
+        shortcutIntent.setAction(Intent.ACTION_VIEW);
+        shortcutIntent.putExtra(MainActivity.EXTRA_DEVICE_ID, device.getDeviceId());
+
+        IconCompat icon = IconCompat.createWithResource(context, device.getDeviceType().toShortcutDrawableId());
+
+        ShortcutInfoCompat shortcut = new ShortcutInfoCompat
+                .Builder(context, device.getDeviceId())
+                .setIntent(shortcutIntent)
+                .setIcon(icon)
+                .setShortLabel(device.getName())
+                .setCategories(Set.of("org.kde.kdeconnect.category.SHARE_TARGET"))
+                .setLocusId(new LocusIdCompat(device.getDeviceId()))
+                .build();
+        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut);
+
+        // Deliver URLs previously shared to this device now that it's connected
+        deliverPreviouslySentIntents();
+        return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        ShortcutManagerCompat.removeLongLivedShortcuts(context, List.of(device.getDeviceId()));
+        super.onDestroy();
+    }
+
+    private void deliverPreviouslySentIntents() {
+        Set<String> currentUrlSet = mSharedPrefs.getStringSet(KEY_UNREACHABLE_URL_LIST + device.getDeviceId(), null);
+        if (currentUrlSet != null) {
+            for (String url : currentUrlSet) {
+                Intent intent;
+                try {
+                    intent = Intent.parseUri(url, 0);
+                } catch (URISyntaxException ex) {
+                    Log.e("SharePlugin", "Malformed URI");
+                    continue;
+                }
+                if (intent != null) {
+                    share(intent);
+                }
+            }
+            mSharedPrefs.edit().putStringSet(KEY_UNREACHABLE_URL_LIST + device.getDeviceId(), null).apply();
+        }
     }
 
     @Override
@@ -110,7 +174,7 @@ public class SharePlugin extends Plugin {
     @Override
     public void startMainActivity(Activity parentActivity) {
         Intent intent = new Intent(parentActivity, SendFileActivity.class);
-        intent.putExtra("deviceId", device.getDeviceId());
+        intent.putExtra("deviceId", getDevice().getDeviceId());
         parentActivity.startActivity(intent);
     }
 
@@ -180,7 +244,7 @@ public class SharePlugin extends Plugin {
         if (hasNumberOfFiles && !isOpen && receiveFileJob != null) {
             job = receiveFileJob;
         } else {
-            job = new CompositeReceiveFileJob(device, receiveFileJobCallback);
+            job = new CompositeReceiveFileJob(getDevice(), receiveFileJobCallback);
         }
 
         if (!hasNumberOfFiles) {
@@ -207,7 +271,7 @@ public class SharePlugin extends Plugin {
         CompositeUploadFileJob job;
 
         if (uploadFileJob == null) {
-            job = new CompositeUploadFileJob(device, this.receiveFileJobCallback);
+            job = new CompositeUploadFileJob(getDevice(), this.receiveFileJobCallback);
         } else {
             job = uploadFileJob;
         }
@@ -257,7 +321,7 @@ public class SharePlugin extends Plugin {
             } else {
                 np.set("text", text);
             }
-            device.sendPacket(np);
+            getDevice().sendPacket(np);
         } else {
             Log.e("SharePlugin", "There's nothing we know how to share");
         }
@@ -337,5 +401,14 @@ public class SharePlugin extends Plugin {
                 }
             }
         }
+    }
+
+    @Override
+    public void onDeviceUnpaired(Context context, String deviceId) {
+        Log.i("KDE/SharePlugin", "onDeviceUnpaired deviceId = " + deviceId);
+        if (mSharedPrefs == null) {
+            mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        }
+        mSharedPrefs.edit().remove(KEY_UNREACHABLE_URL_LIST + deviceId).apply();
     }
 }

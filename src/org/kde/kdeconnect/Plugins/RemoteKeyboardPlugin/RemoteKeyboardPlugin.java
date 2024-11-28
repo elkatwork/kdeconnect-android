@@ -7,6 +7,7 @@
 package org.kde.kdeconnect.Plugins.RemoteKeyboardPlugin;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -18,6 +19,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodInfo;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -33,6 +36,7 @@ import org.kde.kdeconnect.UserInterface.StartActivityAlertDialogFragment;
 import org.kde.kdeconnect_tp.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 @PluginFactory.LoadablePlugin
@@ -106,7 +110,7 @@ public class RemoteKeyboardPlugin extends Plugin implements SharedPreferences.On
 
     @Override
     public boolean onCreate() {
-        Log.d("RemoteKeyboardPlugin", "Creating for device " + device.getName());
+        Log.d("RemoteKeyboardPlugin", "Creating for device " + getDevice().getName());
         acquireInstances();
         try {
             instances.add(this);
@@ -138,7 +142,7 @@ public class RemoteKeyboardPlugin extends Plugin implements SharedPreferences.On
             releaseInstances();
         }
 
-        Log.d("RemoteKeyboardPlugin", "Destroying for device " + device.getName());
+        Log.d("RemoteKeyboardPlugin", "Destroying for device " + getDevice().getName());
     }
 
     @Override
@@ -394,7 +398,7 @@ public class RemoteKeyboardPlugin extends Plugin implements SharedPreferences.On
             if (np.has("alt"))
                 reply.set("alt", np.getBoolean("alt"));
             reply.set("isAck", true);
-            device.sendPacket(reply);
+            getDevice().sendPacket(reply);
         }
 
         return true;
@@ -404,16 +408,19 @@ public class RemoteKeyboardPlugin extends Plugin implements SharedPreferences.On
         Log.d("RemoteKeyboardPlugin", "Keyboardstate changed to " + state);
         NetworkPacket np = new NetworkPacket(PACKET_TYPE_MOUSEPAD_KEYBOARDSTATE);
         np.set("state", state);
-        device.sendPacket(np);
+        getDevice().sendPacket(np);
     }
 
     String getDeviceId() {
-        return device.getDeviceId();
+        return getDevice().getDeviceId();
     }
 
     @Override
     public boolean checkRequiredPermissions() {
-        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_INPUT_METHODS).contains("org.kde.kdeconnect_tp");
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        List<InputMethodInfo> inputMethodList = inputMethodManager.getEnabledInputMethodList();
+        return inputMethodList.stream().anyMatch(
+                info -> context.getPackageName().equals(info.getPackageName()));
     }
 
     @Override

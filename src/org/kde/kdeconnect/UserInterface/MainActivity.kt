@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         // it can trigger a background fetch from the internet that will eventually update the preference
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
         val deviceName = DeviceHelper.getDeviceName(this)
-        mNavViewDeviceType?.setImageDrawable(DeviceHelper.getDeviceType(this).getIcon(this))
+        mNavViewDeviceType?.setImageDrawable(DeviceHelper.deviceType.getIcon(this))
         mNavViewDeviceName.text = deviceName
         mNavigationView.setNavigationItemSelectedListener { menuItem: MenuItem ->
             mCurrentMenuEntry = menuItem.itemId
@@ -286,7 +286,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     override fun onStart() {
         super.onStart()
         BackgroundService.Start(applicationContext)
-        KdeConnect.getInstance().addDeviceListChangedCallback(this::class.simpleName) { runOnUiThread { updateDeviceList() } }
+        KdeConnect.getInstance().addDeviceListChangedCallback(this::class.simpleName!!) { runOnUiThread { updateDeviceList() } }
         updateDeviceList()
         onBackPressedDispatcher.addCallback(mainFragmentCallback)
         onBackPressedDispatcher.addCallback(closeDrawerCallback)
@@ -294,7 +294,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     }
 
     override fun onStop() {
-        KdeConnect.getInstance().removeDeviceListChangedCallback(this::class.simpleName)
+        KdeConnect.getInstance().removeDeviceListChangedCallback(this::class.simpleName!!)
         mainFragmentCallback.remove()
         closeDrawerCallback.remove()
         super.onStop()
@@ -360,6 +360,14 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                 // Otherwise, Receiving files will keep failing until the user chooses a path manually to receive files.
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                 startActivityForResult(intent, STORAGE_LOCATION_CONFIGURED)
+            }
+
+            if (isPermissionGranted(permissions, grantResults, Manifest.permission.BLUETOOTH_CONNECT) &&
+                isPermissionGranted(permissions, grantResults, Manifest.permission.BLUETOOTH_SCAN)) {
+                val preferenceEditor = PreferenceManager.getDefaultSharedPreferences(this).edit()
+                preferenceEditor.putBoolean(SettingsFragment.KEY_BLUETOOTH_ENABLED, true)
+                preferenceEditor.apply()
+                setContentFragment(SettingsFragment())
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isPermissionGranted(permissions, grantResults, Manifest.permission.POST_NOTIFICATIONS)) {

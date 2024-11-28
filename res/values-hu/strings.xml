@@ -18,7 +18,6 @@
   <string name="pref_plugin_clipboard_sent">Vágólap elküldve</string>
   <string name="pref_plugin_mousepad">Távirányítás</string>
   <string name="pref_plugin_mousepad_desc">A telefon vagy tablet használata érintőtáblaként és billentyűzetként</string>
-  <string name="pref_plugin_presenter">Bemutató távirányító</string>
   <string name="pref_plugin_presenter_desc">Az eszköz használata diák léptetésére prezentációkban</string>
   <string name="pref_plugin_remotekeyboard">Távoli billentyűlenyomások fogadása</string>
   <string name="pref_plugin_remotekeyboard_desc">Billentyűlenyomás események fogadása távoli eszközökről</string>
@@ -109,11 +108,9 @@
   <string name="error_canceled_by_user">Megszakítva a felhasználó által</string>
   <string name="error_canceled_by_other_peer">A másik partner megszakította</string>
   <string name="encryption_info_title">Titkosítási információk</string>
-  <string name="encryption_info_msg_no_ssl">A másik eszköz nem használja a KDE Connect legújabb verzióját, régi titkosítási módszert lesz használva.</string>
   <string name="my_device_fingerprint">Az eszköz tanúsítványának SHA256 ujjlenyomata:</string>
   <string name="remote_device_fingerprint">A távoli eszköz tanúsítványának SHA256 ujjlenyomata:</string>
   <string name="pair_requested">Párosítás kérve</string>
-  <string name="pairing_request_from">Párosítási kérés innen: %1s</string>
   <plurals name="incoming_file_title">
     <item quantity="one">%1$d fájl fogadása innen: %2$s</item>
     <item quantity="other">%1$d fájl fogadása innen: %2$s</item>
@@ -178,7 +175,6 @@
   </string-array>
   <string name="mpris_notification_settings_title">Médiavezérlő értesítéseinek megjelenítése</string>
   <string name="mpris_notification_settings_summary">Lehetővé teszi a médialejátszók vezérlését a KDE Connect megnyitása nélkül</string>
-  <string name="share_to">Megosztás…</string>
   <string name="protocol_version_newer">Ez az eszköz egy újabb protokollverziót használ</string>
   <string name="plugin_settings_with_name">%s beállításai</string>
   <string name="invalid_device_name">Érvénytelen eszköznév</string>
@@ -248,7 +244,6 @@
   <string name="telephony_pref_blocked_title">Blokkolt számok</string>
   <string name="telephony_pref_blocked_dialog_desc">Ne jelenítsen meg hívásokat és SMS-eket ezekről a számokról. Soronként egy számot adjon meg</string>
   <string name="mpris_coverart_description">A jelenlegi média borítója</string>
-  <string name="device_icon_description">Eszközikon</string>
   <string name="settings_icon_description">Beállítások ikon</string>
   <string name="presenter_fullscreen">Teljes képernyő</string>
   <string name="presenter_exit">Kilépés bemutató módból</string>

@@ -34,6 +34,7 @@ import org.kde.kdeconnect.UserInterface.PluginSettingsFragment;
 import org.kde.kdeconnect_tp.R;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -104,10 +105,11 @@ public class TelephonyPlugin extends Plugin {
 
                 String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
                 int intState = TelephonyManager.CALL_STATE_IDLE;
-                if (state.equals(TelephonyManager.EXTRA_STATE_RINGING))
+                if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
                     intState = TelephonyManager.CALL_STATE_RINGING;
-                else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
+                } else if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
                     intState = TelephonyManager.CALL_STATE_OFFHOOK;
+                }
 
                 // We will get a second broadcast with the phone number https://developer.android.com/reference/android/telephony/TelephonyManager#ACTION_PHONE_STATE_CHANGED
                 if (!intent.hasExtra(TelephonyManager.EXTRA_INCOMING_NUMBER))
@@ -177,12 +179,12 @@ public class TelephonyPlugin extends Plugin {
             case TelephonyManager.CALL_STATE_RINGING:
                 unmuteRinger();
                 np.set("event", "ringing");
-                device.sendPacket(np);
+                getDevice().sendPacket(np);
                 break;
 
             case TelephonyManager.CALL_STATE_OFFHOOK: //Ongoing call
                 np.set("event", "talking");
-                device.sendPacket(np);
+                getDevice().sendPacket(np);
                 break;
 
             case TelephonyManager.CALL_STATE_IDLE:
@@ -190,7 +192,7 @@ public class TelephonyPlugin extends Plugin {
 
                     //Resend a cancel of the last event (can either be "ringing" or "talking")
                     lastPacket.set("isCancel", "true");
-                    device.sendPacket(lastPacket);
+                    getDevice().sendPacket(lastPacket);
 
                     if (isMuted) {
                         Timer timer = new Timer();
@@ -203,11 +205,11 @@ public class TelephonyPlugin extends Plugin {
                     }
 
                     //Emit a missed call notification if needed
-                    if ("ringing".equals(lastPacket.getString("event", null))) {
+                    if ("ringing".equals(lastPacket.getString("event"))) {
                         np.set("event", "missedCall");
-                        np.set("phoneNumber", lastPacket.getString("phoneNumber", null));
-                        np.set("contactName", lastPacket.getString("contactName", null));
-                        device.sendPacket(np);
+                        np.set("phoneNumber", lastPacket.getStringOrNull("phoneNumber"));
+                        np.set("contactName", lastPacket.getStringOrNull("contactName"));
+                        getDevice().sendPacket(np);
                     }
                 }
                 break;
@@ -331,7 +333,7 @@ public class TelephonyPlugin extends Plugin {
     }
 
     @Override
-    public PluginSettingsFragment getSettingsFragment(Activity activity) {
+    public PluginSettingsFragment getSettingsFragment(@NonNull Activity activity) {
         return PluginSettingsFragment.newInstance(getPluginKey(), R.xml.telephonyplugin_preferences);
     }
 }

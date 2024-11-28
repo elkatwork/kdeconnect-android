@@ -23,11 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.fragment.app.Fragment
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.kde.kdeconnect.BackgroundService
 import org.kde.kdeconnect.Device
@@ -40,6 +43,7 @@ import org.kde.kdeconnect.Plugins.MprisPlugin.MprisPlugin
 import org.kde.kdeconnect.Plugins.Plugin
 import org.kde.kdeconnect.Plugins.PresenterPlugin.PresenterPlugin
 import org.kde.kdeconnect.Plugins.RunCommandPlugin.RunCommandPlugin
+import org.kde.kdeconnect.UserInterface.compose.KdeTheme
 import org.kde.kdeconnect_tp.R
 import org.kde.kdeconnect_tp.databinding.ActivityDeviceBinding
 import org.kde.kdeconnect_tp.databinding.ViewPairErrorBinding
@@ -110,12 +114,12 @@ class DeviceFragment : Fragment() {
             this.refreshDevicesAction()
         }
 
+        requirePairingBinding().pairVerification.text = SslHelper.getVerificationKey(SslHelper.certificate, device?.certificate)
+
         requirePairingBinding().pairButton.setOnClickListener {
             with(requirePairingBinding()) {
                 pairButton.visibility = View.GONE
-                pairMessage.text = null
-                pairVerification.visibility = View.VISIBLE
-                pairVerification.text = SslHelper.getVerificationKey(SslHelper.certificate, device?.certificate)
+                pairMessage.text = getString(R.string.pair_requested)
                 pairProgress.visibility = View.VISIBLE
             }
             device?.requestPairing()
@@ -183,7 +187,7 @@ class DeviceFragment : Fragment() {
         for (p in plugins) {
             if (p.displayInContextMenu()) {
                 menu.add(p.actionName).setOnMenuItemClickListener {
-                    p.startMainActivity(mActivity)
+                    p.startMainActivity(mActivity!!)
                     true
                 }
             }
@@ -200,21 +204,17 @@ class DeviceFragment : Fragment() {
             builder.setPositiveButton(requireContext().resources.getString(R.string.ok)) { dialog, _ ->
                 dialog.dismiss()
             }
-            if (device.certificate == null) {
-                builder.setMessage(R.string.encryption_info_msg_no_ssl)
-            } else {
-                builder.setMessage(
-                    "${
-                        requireContext().resources.getString(R.string.my_device_fingerprint)
-                    } \n ${
-                        SslHelper.getCertificateHash(SslHelper.certificate)
-                    } \n\n ${
-                        requireContext().resources.getString(R.string.remote_device_fingerprint)
-                    } \n ${
-                        SslHelper.getCertificateHash(device.certificate)
-                    }"
-                )
-            }
+            builder.setMessage(
+                "${
+                    requireContext().resources.getString(R.string.my_device_fingerprint)
+                } \n ${
+                    SslHelper.getCertificateHash(SslHelper.certificate)
+                } \n\n ${
+                    requireContext().resources.getString(R.string.remote_device_fingerprint)
+                } \n ${
+                    SslHelper.getCertificateHash(device.certificate)
+                }"
+            )
             menu.add(R.string.encryption_info_title).setOnMenuItemClickListener {
                 builder.show()
                 true
@@ -280,11 +280,15 @@ class DeviceFragment : Fragment() {
             if (device.isPaired) {
                 requirePairingBinding().pairingButtons.visibility = View.GONE
                 if (device.isReachable) {
+                    val context = requireContext()
+                    val pluginsWithButtons = device.loadedPlugins.values.filter { it.displayAsButton(context) }
+                    val pluginsNeedPermissions = device.pluginsWithoutPermissions.values.filter { device.isPluginEnabled(it.pluginKey) }
+                    val pluginsNeedOptionalPermissions = device.pluginsWithoutOptionalPermissions.values.filter { device.isPluginEnabled(it.pluginKey) }
                     requireErrorBinding().errorMessageContainer.visibility = View.GONE
                     requireDeviceBinding().deviceView.visibility = View.VISIBLE
                     requireDeviceBinding().deviceViewCompose.apply {
                         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-                        setContent { Mdc3Theme { PluginList(device) } }
+                        setContent { KdeTheme(context) { PluginList(pluginsWithButtons, pluginsNeedPermissions, pluginsNeedOptionalPermissions) } }
                     }
                     displayBatteryInfoIfPossible()
                 } else {
@@ -306,6 +310,7 @@ class DeviceFragment : Fragment() {
         }
 
         override fun pairingSuccessful() {
+            requirePairingBinding().pairMessage.announceForAccessibility(getString(R.string.pair_succeeded))
             mActivity?.runOnUiThread { refreshUI() }
         }
 
@@ -313,8 +318,6 @@ class DeviceFragment : Fragment() {
             mActivity?.runOnUiThread {
                 with(requirePairingBinding()) {
                     pairMessage.text = error
-                    pairVerification.text = null
-                    pairVerification.visibility = View.GONE
                     pairProgress.visibility = View.GONE
                     pairButton.visibility = View.VISIBLE
                     pairRequestButtons.visibility = View.GONE
@@ -327,7 +330,6 @@ class DeviceFragment : Fragment() {
             mActivity?.runOnUiThread {
                 with(requirePairingBinding()) {
                     pairMessage.setText(R.string.device_not_paired)
-                    pairVerification.visibility = View.GONE
                     pairProgress.visibility = View.GONE
                     pairButton.visibility = View.VISIBLE
                     pairRequestButtons.visibility = View.GONE
@@ -375,7 +377,7 @@ class DeviceFragment : Fragment() {
     fun PreviewCompose() {
         val plugins = listOf(MprisPlugin(), RunCommandPlugin(), PresenterPlugin())
         plugins.forEach { it.setContext(LocalContext.current, null) }
-        PluginButtons(plugins.iterator(), 2)
+        PluginButtons(plugins, 2)
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -383,8 +385,8 @@ class DeviceFragment : Fragment() {
     fun PluginButton(plugin : Plugin, modifier: Modifier) {
         Card(
             shape = MaterialTheme.shapes.medium,
-            modifier = modifier,
-            onClick = { plugin.startMainActivity(mActivity) }
+            modifier = modifier.semantics { role = Role.Button },
+            onClick = { plugin.startMainActivity(mActivity!!) }
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -407,9 +409,10 @@ class DeviceFragment : Fragment() {
     }
 
     @Composable
-    fun PluginButtons(plugins: Iterator<Plugin>, numColumns: Int) {
+    fun PluginButtons(plugins: List<Plugin>, numColumns: Int) {
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            while (plugins.hasNext()) {
+            val pluginIter = plugins.iterator()
+            while (pluginIter.hasNext()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -417,9 +420,9 @@ class DeviceFragment : Fragment() {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     repeat(numColumns) {
-                        if (plugins.hasNext()) {
+                        if (pluginIter.hasNext()) {
                             PluginButton(
-                                plugin = plugins.next(),
+                                plugin = pluginIter.next(),
                                 modifier = Modifier.weight(1f)
                             )
                         } else {
@@ -435,7 +438,7 @@ class DeviceFragment : Fragment() {
     fun PluginsWithoutPermissions(title : String, plugins: Collection<Plugin>, action : (plugin: Plugin) -> Unit) {
         Text(
             text = title,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).semantics { heading() }
         )
         plugins.forEach { plugin ->
             Text(
@@ -444,19 +447,17 @@ class DeviceFragment : Fragment() {
                     .fillMaxWidth()
                     .clickable { action(plugin) }
                     .padding(start = 28.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
+                    .semantics { role = Role.Button }
             )
         }
     }
 
     @Composable
-    fun PluginList(device : Device) {
-
-        val context = requireContext()
-
-        val pluginsWithButtons = device.loadedPlugins.values.filter { it.displayAsButton(context) }.iterator()
-        val pluginsNeedPermissions = device.pluginsWithoutPermissions.values.filter { device.isPluginEnabled(it.pluginKey) }
-        val pluginsNeedOptionalPermissions = device.pluginsWithoutOptionalPermissions.values.filter { device.isPluginEnabled(it.pluginKey) }
-
+    fun PluginList(
+        pluginsWithButtons: List<Plugin>,
+        pluginsNeedPermissions: List<Plugin>,
+        pluginsNeedOptionalPermissions: List<Plugin>
+    ) {
         Surface {
             Column(modifier = Modifier.padding(top = 16.dp)) {
 

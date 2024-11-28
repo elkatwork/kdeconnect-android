@@ -17,7 +17,6 @@
   <string name="pref_plugin_clipboard_sent">Schránka odoslaná</string>
   <string name="pref_plugin_mousepad">Vzdialený vstup</string>
   <string name="pref_plugin_mousepad_desc">Použije váš telefón alebo tablet ako touchpad a klávesnicu</string>
-  <string name="pref_plugin_presenter">Diaľkový ovládač prezentácie</string>
   <string name="pref_plugin_presenter_desc">Použije vaše zariadenie na zmenu snímok prezentácie</string>
   <string name="pref_plugin_remotekeyboard">Prijímanie vzdialených stlačení klávesov</string>
   <string name="pref_plugin_remotekeyboard_desc">Prijme udalosti stlačenia klávesov z diaľkových zariadení</string>
@@ -100,11 +99,9 @@
   <string name="error_canceled_by_user">Zrušené používateľom</string>
   <string name="error_canceled_by_other_peer">Zrušené druhým účastníkom</string>
   <string name="encryption_info_title">Informácie o šifrovaní</string>
-  <string name="encryption_info_msg_no_ssl">Druhé zariadenie nepoužíva najnovšiu verziu aplikácie KDE Connect. Použije sa zastaralý spôsob šifrovania.</string>
   <string name="my_device_fingerprint">Odtlačok SHA256 certifikátu vášho zariadenia je:</string>
   <string name="remote_device_fingerprint">Odtlačok SHA256 certifikátu vzdialeného zariadenia je:</string>
   <string name="pair_requested">Spárovanie vyžiadané</string>
-  <string name="pairing_request_from">Požiadavka na spárovanie zo zariadenia %1s</string>
   <plurals name="incoming_file_title">
     <item quantity="one">Prijíma sa %1$d súbor z %2$s</item>
     <item quantity="few">Prijímajú sa %1$d súbory z %2$s</item>
@@ -185,7 +182,6 @@
   </string-array>
   <string name="mpris_notification_settings_title">Zobraziť upozornenie ovládania médií</string>
   <string name="mpris_notification_settings_summary">Umožní ovládanie vašich multimediálnych prehrávačov bez otvorenia aplikácie KDE Connect</string>
-  <string name="share_to">Zdieľať do…</string>
   <string name="protocol_version_newer">Toto zariadenie používa novšiu verziu protokolu</string>
   <string name="plugin_settings_with_name">Nastavenia modulu %s</string>
   <string name="invalid_device_name">Neplatný názov zariadenia</string>
@@ -254,7 +250,6 @@
   <string name="telephony_pref_blocked_title">Blokované čísla</string>
   <string name="telephony_pref_blocked_dialog_desc">Z týchto čísel sa nebudú zobrazovať hovori ani správy SMS. Prosím, určte jedno číslo na riadok</string>
   <string name="mpris_coverart_description">Obrázok obalu aktuálneho média</string>
-  <string name="device_icon_description">Ikona zariadenia</string>
   <string name="settings_icon_description">Ikona nastavení</string>
   <string name="presenter_fullscreen">Na celú obrazovku</string>
   <string name="presenter_exit">Ukončiť prezentáciu</string>

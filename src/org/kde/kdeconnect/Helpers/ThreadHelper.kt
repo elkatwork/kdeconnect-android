@@ -15,5 +15,4 @@ object ThreadHelper {
 
     @JvmStatic
     fun execute(command: Runnable) = executor.execute(command)
-
 }

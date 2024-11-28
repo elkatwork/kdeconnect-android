@@ -18,7 +18,7 @@
   <string name="pref_plugin_clipboard_sent">Wysłano ze schowka</string>
   <string name="pref_plugin_mousepad">Obsługa zdalna</string>
   <string name="pref_plugin_mousepad_desc">Używa telefonu lub tabletu jako gładzika i klawiatury do sterowania innym urządzeniem</string>
-  <string name="pref_plugin_presenter">Sterowanie prezentacją</string>
+  <string name="pref_plugin_presenter">Pilot do prezentacji</string>
   <string name="pref_plugin_presenter_desc">Przełącza strony przy użyciu telefonu</string>
   <string name="pref_plugin_remotekeyboard">Odbieranie klawiszy</string>
   <string name="pref_plugin_remotekeyboard_desc">Odbiera naciśnięcia klawiszy z innego urządzenia do sterowania tym urządzeniem</string>
@@ -52,6 +52,7 @@
   <string name="remotekeyboard_multiple_connections">Nawiązano więcej niż jedno połączenie zdalnej klawiatury, wybierz urządzenie do ustawienia</string>
   <string name="open_mousepad">Zdalne sterowanie</string>
   <string name="mousepad_info">Przesuwanie palcem po ekranie przesuwa wskaźnik myszy. Stuknięcie jednym, dwoma i trzema palcami wywołuje odpowiednio naciśnięcie lewym, prawym i środkowym przyciskiem myszy. Dwa palce przewijają. Długie naciśnięcie rozpoczyna czynność przeciągania i upuszczania. Zachowania żyroskopowe myszy mogą być włączone z poziomu ustawień wtyczki.</string>
+  <string name="mousepad_info_no_gestures">Przesuń palcem po ekranie, aby przesunąć wskaźnikiem myszy, dotknij, aby kliknąć.</string>
   <string name="mousepad_keyboard_input_not_supported">Wpisywanie z klawiatury jest nieobsługiwane przez sparowane urządzenie</string>
   <string name="mousepad_single_tap_settings_title">Ustaw działanie po stuknięciu jednym palcem</string>
   <string name="mousepad_double_tap_settings_title">Ustaw działanie po stuknięciu dwoma palcami</string>
@@ -60,6 +61,7 @@
   <string name="mousepad_mouse_buttons_title">Pokaż przyciski myszy</string>
   <string name="mousepad_acceleration_profile_settings_title">Ustaw przyspieszenie wskaźnika</string>
   <string name="mousepad_scroll_direction_title">Odwróć stronę przewijania</string>
+  <string name="mousepad_scroll_sensitivity_title">Czułość przewijania</string>
   <string name="gyro_mouse_enabled_title">Włącz mysz żyroskopową</string>
   <string name="gyro_mouse_sensitivity_title">Czułość żyroskopu</string>
   <string-array name="mousepad_tap_entries">
@@ -116,11 +118,11 @@
   <string name="error_canceled_by_user">Użytkownik zaniechał</string>
   <string name="error_canceled_by_other_peer">Inny uczestnik zaniechał</string>
   <string name="encryption_info_title">Dane o szyfrowaniu</string>
-  <string name="encryption_info_msg_no_ssl">Drugie urządzenie nie używa ostatniej wersji KDE Connect, użyto przestarzałego szyfrowania.</string>
   <string name="my_device_fingerprint">Odcisk palca SHA256 certyfikatu twojego urządzenia to:</string>
   <string name="remote_device_fingerprint">Odcisk palca SHA256 certyfikatu twojego zdalnego urządzenia to:</string>
-  <string name="pair_requested">Zażądano parowania</string>
-  <string name="pairing_request_from">Żądanie parowania z %1s</string>
+  <string name="pair_requested">Poproszono o sparowanie</string>
+  <string name="pair_succeeded">Parowanie udane</string>
+  <string name="pairing_request_from">Prośba o sparowanie od \'%1s\'</string>
   <plurals name="incoming_file_title">
     <item quantity="one">Pobieranie %1$d pliku z %2$s</item>
     <item quantity="few">Pobieranie %1$d plików z %2$s</item>
@@ -173,11 +175,12 @@
   <string name="received_file_text">Stuknij, aby otworzyć „%1s”</string>
   <string name="cannot_create_file">Nie można utworzyć pliku %s</string>
   <string name="tap_to_answer">Stuknij, aby odpowiedzieć</string>
-  <string name="right_click">Wyślij naciskając prawym</string>
-  <string name="middle_click">Wyślij naciskając środkowym</string>
+  <string name="left_click">Wyślij kliknięcie lewym</string>
+  <string name="right_click">Wyślij kliknięcie prawym</string>
+  <string name="middle_click">Wyślij kliknięcie środkowym</string>
   <string name="show_keyboard">Pokaż klawiaturę</string>
   <string name="device_not_paired">Urządzenie niesparowane</string>
-  <string name="request_pairing">Zażądaj sparowania</string>
+  <string name="request_pairing">Prośba o sparowanie</string>
   <string name="pairing_accept">Przyjmij</string>
   <string name="pairing_reject">Odrzuć</string>
   <string name="settings">Ustawienia</string>
@@ -203,6 +206,8 @@
   <string name="mpris_notification_settings_title">Pokaż powiadomienia sterowania mediami</string>
   <string name="mpris_notification_settings_summary">Steruje odtwarzaczami bez otwierania KDE Connect</string>
   <string name="share_to">Udostępnij urządzeniu...</string>
+  <string name="unreachable_device">%s (nieosiągalne)</string>
+  <string name="unreachable_device_url_share_text">Adres URL udostępniony nieosiągalnemu urządzeniu zostanie do niego dostarczony zaraz po tym jak stanie się osiągalne.\n\n</string>
   <string name="protocol_version_newer">Urządzenie to używa nowszej wersji protokołu</string>
   <string name="plugin_settings_with_name">Ustawienia %s</string>
   <string name="invalid_device_name">Nieprawidłowa nazwa urządzenia</string>
@@ -279,7 +284,6 @@
   <string name="telephony_pref_blocked_title">Zablokowane numery</string>
   <string name="telephony_pref_blocked_dialog_desc">Nie pokazuj rozmów, ani SMSów z tych numerów. Podawaj jeden numer na wiersz</string>
   <string name="mpris_coverart_description">Okładka dla bieżących multimediów</string>
-  <string name="device_icon_description">Ikona urządzenia</string>
   <string name="settings_icon_description">Ikona ustawień</string>
   <string name="presenter_fullscreen">Pełny ekran</string>
   <string name="presenter_exit">Zakończ prezentację</string>
@@ -338,6 +342,7 @@
   <string name="empty_trusted_networks_list_text">Nie dodałeś jeszcze żadnej zaufanej sieci</string>
   <string name="allow_all_networks_text">Zezwól wszystkim</string>
   <string name="location_permission_needed_title">Wymagana zgoda</string>
+  <string name="bluetooth_permission_needed_desc">KDE Connect wymaga pozwolenia na łączenie do sąsiednich urządzeń, aby urządzenia sparowane przy pomocy Bluetooth były widoczne w KDE Connect.</string>
   <string name="location_permission_needed_desc">KDE Connect potrzebuje uprawnień do sprawdzania twojego położenia w tle, aby móc poznać sieć WiFi, do której jesteś podłączony także wtedy, gdy aplikacja działa w tle. Jest tak dlatego, że nazwy sieci WiFi wokół ciebie mogą zostać użyte do ustalenia twojego położenia, mimo że KDE Connect nie robi tego w ten sposób.</string>
   <string name="clipboard_android_x_incompat">Android 10 odebrał dostęp do schowka wszystkim programom. Ta wtyczka pozostanie wyłączona.</string>
   <string name="mpris_open_url">Kontynuuj odtwarzanie tutaj</string>
@@ -401,8 +406,11 @@
   <string name="send_compose">Wyślij</string>
   <string name="compose_send_title">Napisz do wysłania</string>
   <string name="open_compose_send">Napisz tekst</string>
+  <string name="double_tap_to_drag">Stuknij dwukrotnie, aby przeciągnąć</string>
+  <string name="hold_to_drag">Przytrzymaj, aby przeciągnąć</string>
   <string name="about_kde_about">"&lt;h1&gt;O programie&lt;/h1&gt; &lt;p&gt;KDE to światowa społeczność inżynierów oprogramowania, artystów, pisarzy, tłumaczy i twórców, którzy są częścią rozwoju &lt;a href=https://www.gnu.org/philosophy/free-sw.html&gt;Wolnego Oprogramowania&lt;/a&gt;. KDE tworzy środowisko pulpitu Plazmy, setki aplikacji  i wiele bibliotek programistycznych, aby je wspierać.&lt;/p&gt; &lt;p&gt;KDE jest przedsięwzięciem istniejącym ze współpracy; jego ruchami, czy produktami, nie steruje żaden pojedynczy byt. Pracujemy razem, aby osiągnąć wspólny cel, czyli budowę najlepszego Wolnego Oprogramowania na świecie. Każdy jest mile wiedziany, żeby &lt;a href=https://community.kde.org/Get_Involved&gt;dołączył i zaczął współtworzyć&lt;/a&gt; KDE, włączając w to ciebie.&lt;/p&gt; Odwiedź &lt; href=https://www.kde.org/&gt;https://www.kde.org/&lt;/a&gt; po więcej szczegółów nt. społeczności KDE i oprogramowania, które tworzymy."</string>
   <string name="about_kde_report_bugs_or_wishes">&lt;h1&gt;Zgłaszaj błędy lub życzenia&lt;/h1&gt; &lt;p&gt;Oprogramowanie zawsze można ulepszyć, a zespół KDE jest gotowy, aby to robić. Jednakże ty - użytkownik - musisz nam powiedzieć o tym, co nie działa jak powinno lub co można zrobić lepiej.&lt;/p&gt; &lt;p&gt;KDE ma system obsługi błędów. Odwiedź &lt;a href=https://bugs.kde.org/&gt;https://bugs.kde.org/&lt;/a&gt; lub użyj przycisku \"Zgłoś błąd\" z ekranu o programie do zgłaszania błędów.&lt;/p&gt; Jeśli masz sugestie nt. usprawnień, to także możesz ją zarejestrować w naszym systemie obsługi błędów. Upewnij się, że użyjesz ważności o nazwie \"Lista życzeń\".</string>
+  <string name="about_kde_join_kde">&lt;h1&gt;Dołącz do KDE&lt;/h1&gt; &lt;p&gt;Nie musisz być programistą, aby być członkiem zespołu KDE. Możesz dołączyć do zespołów językowych, które tłumaczą oprogramowanie. Możesz dostarczać grafikę, zestawy wyglądu, dźwięki i ulepszać dokumentację. To ty decydujesz!&lt;/p&gt; &lt;p&gt;odwiedź &lt;a href=https://community.kde.org/Get_Involved&gt;https://community.kde.org/Get_Involved&lt;/a&gt; po szczegóły nt. projektów, w których możesz wziąć udział .&lt;/p&gt; Jeśli potrzebujesz więcej szczegółów lub dokumentacji, to odwiedziny na &lt;a href=https://techbase.kde.org/&gt;https://techbase.kde.org/&lt;/a&gt; dadzą ci to, czego chcesz.</string>
   <string name="about_kde_support_kde">&lt;h1&gt;Wesprzyj KDE&lt;/h1&gt; &lt;p&gt;Oprogramowanie KDE jest i zawsze będzie dostępne za darmo, jednakże tworzenie go nie jest darmowe.&lt;/p&gt; &lt;p&gt;Aby wesprzeć rozwój, społeczność KDE założyła KDE e.V., organizację non-profit prawnie założoną w Niemczech. KDE e.V. stanowi społeczność KDE w sprawach prawnych i finansowych. Zajrzyj na &lt;a href=https://ev.kde.org/&gt;https://ev.kde.org/&lt;/a&gt; po więcej szczegółów o KDE e.V.&lt;/p&gt; &lt;p&gt;KDE korzysta z wielu rodzajów pomocy, w tym także finansowej. Używamy środków do zwracania członkom i innym wydatków, które ponoszą podczas tworzenia. Dalsze środki są używane na wsparcie prawne oraz organizowanie konferencji i spotkań.&lt;/p&gt; &lt;p&gt;Zachęcamy do wspierania naszego wysiłku poprzez darowizny, przy użyciu jednego ze sposobów wymienionych na &lt;a href=https://www.kde.org/community/donations/&gt;https://www.kde.org/community/donations/&lt;/a&gt;.&lt;/p&gt; Dzięki z góry za twoje wsparcie.</string>
   <string name="maintainer_and_developer">Opiekun i programista</string>
   <string name="developer">Programista</string>
@@ -414,12 +422,18 @@
   <string name="maxim_leshchenko_task">Usprawnienia do interfejsu i strony o programie</string>
   <string name="holger_kaelberer_task">Wtyczka zdalnej klawiatury i usuwanie błędów</string>
   <string name="saikrishna_arcot_task">Wsparcie do obsługi klawiatury we wtyczce zdalnego wprowadzania, usuwanie błędów i ogólne usprawnienia</string>
+  <string name="shellwen_chen_task">Polepszenie bezpieczeństwa SFTP, polepszenie łatwości w utrzymaniu tego projektu, poprawki błędów oraz ogólne ulepszenia</string>
   <string name="everyone_else">Inni którzy współtworzyli KDE Connect na przestrzeni lat</string>
   <string name="send_clipboard">Wysyłanie schowka</string>
   <string name="tap_to_execute">Stuknij, aby wykonać</string>
   <string name="plugin_stats">Statystyki wtyczek</string>
   <string name="enable_udp_broadcast">Włącz wykrywanie urządzeń UDP</string>
+  <string name="enable_bluetooth">Włącz Bluetooth (beta)</string>
   <string name="receive_notifications_permission_explanation">Należy zezwolić na powiadomienia, aby móc je otrzymywać z innych urządzeń</string>
   <string name="findmyphone_notifications_explanation">Uprawnienia powiadomień są potrzebne, aby telefon mógł dzwonić, gdy aplikacja działa w tle</string>
   <string name="no_notifications">Powiadomienia są wyłączone, więc nie otrzymasz żadnych próśb o sparowanie.</string>
+  <string name="mpris_keepwatching">Kontynuuj odtwarzanie</string>
+  <string name="mpris_keepwatching_settings_title">Kontynuuj odtwarzanie</string>
+  <string name="mpris_keepwatching_settings_summary">Pokaż ciche powiadomienie, aby kontynuować odtwarzanie na tym urządzeniu po zamknięciu mediów</string>
+  <string name="notification_channel_keepwatching">Kontynuuj odtwarzanie</string>
 </resources>

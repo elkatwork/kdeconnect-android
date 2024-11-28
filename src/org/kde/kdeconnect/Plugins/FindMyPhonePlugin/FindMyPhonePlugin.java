@@ -37,6 +37,7 @@ import org.kde.kdeconnect.UserInterface.PluginSettingsFragment;
 import org.kde.kdeconnect_tp.R;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @PluginFactory.LoadablePlugin
 public class FindMyPhonePlugin extends Plugin {
@@ -51,7 +52,7 @@ public class FindMyPhonePlugin extends Plugin {
 
     @Override
     public @NonNull String getDisplayName() {
-        switch (DeviceHelper.getDeviceType(context)) {
+        switch (DeviceHelper.getDeviceType()) {
             case TV:
                 return context.getString(R.string.findmyphone_title_tv);
             case TABLET:
@@ -118,7 +119,7 @@ public class FindMyPhonePlugin extends Plugin {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || LifecycleHelper.isInForeground()) {
             Intent intent = new Intent(context, FindMyPhoneActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(FindMyPhoneActivity.EXTRA_DEVICE_ID, device.getDeviceId());
+            intent.putExtra(FindMyPhoneActivity.EXTRA_DEVICE_ID, getDevice().getDeviceId());
             context.startActivity(intent);
         } else {
             if (!checkOptionalPermissions()) {
@@ -138,18 +139,18 @@ public class FindMyPhonePlugin extends Plugin {
         Intent intent = new Intent(context, FindMyPhoneReceiver.class);
         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.setAction(FindMyPhoneReceiver.ACTION_FOUND_IT);
-        intent.putExtra(FindMyPhoneReceiver.EXTRA_DEVICE_ID, device.getDeviceId());
+        intent.putExtra(FindMyPhoneReceiver.EXTRA_DEVICE_ID, getDevice().getDeviceId());
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         createNotification(pendingIntent);
     }
 
     private void showActivityNotification() {
         Intent intent = new Intent(context, FindMyPhoneActivity.class);
-        intent.putExtra(FindMyPhoneActivity.EXTRA_DEVICE_ID, device.getDeviceId());
+        intent.putExtra(FindMyPhoneActivity.EXTRA_DEVICE_ID, getDevice().getDeviceId());
 
-        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         createNotification(pi);
     }
 

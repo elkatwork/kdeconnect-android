@@ -33,9 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.media.VolumeProviderCompat
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import org.kde.kdeconnect.KdeConnect
 import org.kde.kdeconnect.UserInterface.compose.KdeButton
+import org.kde.kdeconnect.UserInterface.compose.KdeTheme
 import org.kde.kdeconnect.UserInterface.compose.KdeTopAppBar
 import org.kde.kdeconnect_tp.R
 
@@ -49,12 +49,11 @@ class PresenterActivity : AppCompatActivity(), SensorEventListener {
         if (offScreenControlsSupported) MediaSessionCompat(this, "kdeconnect") else null
     }
     private val powerManager by lazy { getSystemService(POWER_SERVICE) as PowerManager }
-    private val plugin: PresenterPlugin by lazy {
-        KdeConnect.getInstance().getDevicePlugin(intent.getStringExtra("deviceId"), PresenterPlugin::class.java)
-    }
+    private lateinit var plugin : PresenterPlugin
 
     //TODO: make configurable
     private val sensitivity = 0.03f
+
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_GYROSCOPE) {
             val xPos = -event.values[2] * sensitivity
@@ -70,6 +69,7 @@ class PresenterActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        plugin = KdeConnect.getInstance().getDevicePlugin(intent.getStringExtra("deviceId"), PresenterPlugin::class.java)!!
         setContent { PresenterScreen() }
         createMediaSession()
     }
@@ -115,7 +115,7 @@ class PresenterActivity : AppCompatActivity(), SensorEventListener {
 
         val sensorManager = LocalContext.current.getSystemService(SENSOR_SERVICE) as? SensorManager
 
-        Mdc3Theme {
+        KdeTheme(this) {
             Scaffold(topBar = { PresenterAppBar() }) {
                 Column(
                     modifier = Modifier.fillMaxSize().padding(it).padding(16.dp),
@@ -133,10 +133,12 @@ class PresenterActivity : AppCompatActivity(), SensorEventListener {
                         KdeButton(
                             onClick = { plugin.sendPrevious() },
                             modifier = Modifier.fillMaxSize().weight(1f),
+                            contentDescription = getString(R.string.mpris_previous),
                             icon = Icons.Default.ArrowBack,
                         )
                         KdeButton(
                             onClick = { plugin.sendNext() },
+                            contentDescription = getString(R.string.mpris_next),
                             modifier = Modifier.fillMaxSize().weight(1f),
                             icon = Icons.Default.ArrowForward,
                         )
@@ -176,20 +178,25 @@ class PresenterActivity : AppCompatActivity(), SensorEventListener {
 
         var dropdownShownState by remember { mutableStateOf(false) }
 
-        KdeTopAppBar(navIconOnClick = { onBackPressedDispatcher.onBackPressed() }, actions = {
-            IconButton(onClick = { dropdownShownState = true }) {
-                Icon(Icons.Default.MoreVert, stringResource(R.string.extra_options))
+        KdeTopAppBar(
+            title = stringResource(R.string.pref_plugin_presenter),
+            navIconOnClick = { onBackPressedDispatcher.onBackPressed() },
+            navIconDescription = getString(androidx.appcompat.R.string.abc_action_bar_up_description),
+            actions = {
+                IconButton(onClick = { dropdownShownState = true }) {
+                    Icon(Icons.Default.MoreVert, stringResource(R.string.extra_options))
+                }
+                DropdownMenu(expanded = dropdownShownState, onDismissRequest = { dropdownShownState = false }) {
+                    DropdownMenuItem(
+                        onClick = { plugin.sendFullscreen() },
+                        text = { Text(stringResource(R.string.presenter_fullscreen)) },
+                    )
+                    DropdownMenuItem(
+                        onClick = { plugin.sendEsc() },
+                        text = { Text(stringResource(R.string.presenter_exit)) },
+                    )
+                }
             }
-            DropdownMenu(expanded = dropdownShownState, onDismissRequest = { dropdownShownState = false }) {
-                DropdownMenuItem(
-                    onClick = { plugin.sendFullscreen() },
-                    text = { Text(stringResource(R.string.presenter_fullscreen)) },
-                )
-                DropdownMenuItem(
-                    onClick = { plugin.sendEsc() },
-                    text = { Text(stringResource(R.string.presenter_exit)) },
-                )
-            }
-        })
+        )
     }
 }

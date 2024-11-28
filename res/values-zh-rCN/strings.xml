@@ -18,7 +18,7 @@
   <string name="pref_plugin_clipboard_sent">剪贴板已发送</string>
   <string name="pref_plugin_mousepad">远程输入</string>
   <string name="pref_plugin_mousepad_desc">将您的手机用或平板电脑用作触摸板和键盘</string>
-  <string name="pref_plugin_presenter">幻灯片遥控器</string>
+  <string name="pref_plugin_presenter">演示遥控</string>
   <string name="pref_plugin_presenter_desc">使用移动设备切换幻灯片</string>
   <string name="pref_plugin_remotekeyboard">接收远程按键</string>
   <string name="pref_plugin_remotekeyboard_desc">从远程设备接收按键事件</string>
@@ -52,6 +52,7 @@
   <string name="remotekeyboard_multiple_connections">发现多个远程键盘连接，请选择要配置的设备</string>
   <string name="open_mousepad">远程输入</string>
   <string name="mousepad_info">在屏幕上移动手指来移动光标。轻击代表左键，双指或三指点击代表右键或中键。用双指滚动。用长按来拖放。基于陀螺仪的空中鼠标功能可以在插件的首选项中启用。</string>
+  <string name="mousepad_info_no_gestures">在屏幕上移动手指来移动鼠标光标，手指轻点来进行鼠标键点击。</string>
   <string name="mousepad_keyboard_input_not_supported">配对的设备不支持键盘输入</string>
   <string name="mousepad_single_tap_settings_title">设置单指点击操作</string>
   <string name="mousepad_double_tap_settings_title">设置双指点击操作</string>
@@ -60,6 +61,7 @@
   <string name="mousepad_mouse_buttons_title">显示鼠标按钮</string>
   <string name="mousepad_acceleration_profile_settings_title">设置指针加速度</string>
   <string name="mousepad_scroll_direction_title">反转滚动方向</string>
+  <string name="mousepad_scroll_sensitivity_title">滚动灵敏度</string>
   <string name="gyro_mouse_enabled_title">启用陀螺仪鼠标</string>
   <string name="gyro_mouse_sensitivity_title">陀螺仪灵敏度</string>
   <string-array name="mousepad_tap_entries">
@@ -116,11 +118,11 @@
   <string name="error_canceled_by_user">已被用户取消</string>
   <string name="error_canceled_by_other_peer">已被其他对等点取消</string>
   <string name="encryption_info_title">加密信息</string>
-  <string name="encryption_info_msg_no_ssl">另一设备没有使用最新的 KDE Connect，使用旧版加密方法。</string>
   <string name="my_device_fingerprint">您的设备证书的 SHA256 指纹是：</string>
   <string name="remote_device_fingerprint">远程设备证书的 SHA256 指纹是：</string>
   <string name="pair_requested">已请求配对</string>
-  <string name="pairing_request_from">来自 %1s 的配对请求</string>
+  <string name="pair_succeeded">配对成功</string>
+  <string name="pairing_request_from">来自“%1s”的配对请求</string>
   <plurals name="incoming_file_title">
     <item quantity="other">正在从 %2$s 接收 %1$d 个文件</item>
   </plurals>
@@ -149,6 +151,7 @@
   <string name="received_file_text">点击打开“%1s”</string>
   <string name="cannot_create_file">无法创建文件 %s</string>
   <string name="tap_to_answer">点击应答</string>
+  <string name="left_click">发送左键点击</string>
   <string name="right_click">发送右键点击</string>
   <string name="middle_click">发送中键点击</string>
   <string name="show_keyboard">显示键盘</string>
@@ -178,7 +181,9 @@
   <string name="mpris_notifications_explanation">在通知栏中显示远程媒体需要通知权限</string>
   <string name="mpris_notification_settings_title">显示媒体控制通知</string>
   <string name="mpris_notification_settings_summary">不打开 KDE Connect 也能在常驻通知中控制媒体播放器</string>
-  <string name="share_to">分享到...</string>
+  <string name="share_to">分享到…</string>
+  <string name="unreachable_device">%s (无法访问)</string>
+  <string name="unreachable_device_url_share_text">URL 被分享到了不可访问的设备。它将在设备能够访问时自动传输到该设备。\n</string>
   <string name="protocol_version_newer">此设备使用较新版本的协议</string>
   <string name="plugin_settings_with_name">%s设置</string>
   <string name="invalid_device_name">无效的设备名</string>
@@ -255,7 +260,6 @@
   <string name="telephony_pref_blocked_title">已屏蔽的号码</string>
   <string name="telephony_pref_blocked_dialog_desc">不要显示来自这些号码的电话和短信。一行一个号码</string>
   <string name="mpris_coverart_description">当前媒体的封面艺术</string>
-  <string name="device_icon_description">设备图标</string>
   <string name="settings_icon_description">设置图标</string>
   <string name="presenter_fullscreen">全屏</string>
   <string name="presenter_exit">退出演示</string>
@@ -314,6 +318,7 @@
   <string name="empty_trusted_networks_list_text">您还没有添加任何可信的网络</string>
   <string name="allow_all_networks_text">允许所有</string>
   <string name="location_permission_needed_title">需要权限</string>
+  <string name="bluetooth_permission_needed_desc">KDE Connect 需要权限才能使用蓝牙连接并配对附近的设备。</string>
   <string name="location_permission_needed_desc">KDE Connect 需要后台位置权限才能在后台检测您连接到的 WiFi 网络。后台位置权限是一个敏感权限，这是因为该权限可以让应用程序通过您周围的 WiFi 网络名称来查找您的位置。尽管 KDE Connect 申请了该权限，但它不会对您进行定位。</string>
   <string name="clipboard_android_x_incompat">Android 10 已删除所有应用的剪贴板访问权限。此插件将被禁用。</string>
   <string name="mpris_open_url">继续在此播放</string>
@@ -377,6 +382,8 @@
   <string name="send_compose">发送</string>
   <string name="compose_send_title">编写发送</string>
   <string name="open_compose_send">编写文本</string>
+  <string name="double_tap_to_drag">双击进行拖动</string>
+  <string name="hold_to_drag">按住进行拖动</string>
   <string name="about_kde_about">&lt;h1&gt;关于&lt;/h1&gt; &lt;p&gt;KDE 是由一群致力于&lt;a href=https://www.gnu.org/philosophy/free-sw.html&gt;自由软件&lt;/a&gt;事业的人们所组成的全球性协作社区。它的成员包括了来自世界各地的软件工程师、艺术工作者、文字工作者、翻译人员和其他创意人员。KDE 社区开发了 Plasma 桌面环境、数百款功能各异的应用软件、以及用于支持它们的大量程序库。&lt;/p&gt; &lt;p&gt;KDE 是一项立足于协作精神的事业，它的运作和产出不受任何单一个人或者机构的控制。我们的共同目标是为全世界带来高品质的自由软件。不管您来自何方，我们都欢迎您&lt;a href=https://community.kde.org/Get_Involved&gt;加入 KDE 并做出贡献&lt;/a&gt;。&lt;/p&gt;请访问 &lt;a href=https://www.kde.org/&gt;https://www.kde.org/&lt;/a&gt; 来了解 KDE 社区和软件的更多信息。</string>
   <string name="about_kde_report_bugs_or_wishes">&lt;h1&gt;报告程序缺陷和需求&lt;/h1&gt; &lt;p&gt;KDE 团队一直致力于改进软件的品质。为了做到这一点，倾听来自用户的反馈非常重要。如果您遇到了软件不能正常工作的情况，请务必告诉我们。如果您有关于改进软件的想法，也请与我们分享。&lt;/p&gt; &lt;p&gt;KDE 建有程序缺陷跟踪系统，请访问 &lt;a href=https://bugs.kde.org/&gt;https://bugs.kde.org/&lt;/a&gt; 或者使用“帮助”菜单中的“报告缺陷”对话框填写报告。&lt;/p&gt;如果您想要提出改进建议而不是报告程序缺陷，请确保在表格的 Severity (严重程度) 选单中选择“Wishlist (需求)”。</string>
   <string name="about_kde_join_kde">&lt;h1&gt;加入 KDE&lt;/h1&gt; &lt;p&gt;即使您不是软件开发人员，我们也欢迎您加入 KDE 的队伍！您可以加入各种语言的翻译团队来翻译软件的界面，您还可以制作图像、主题、音效，或者改进软件配套的文档……您的角色您来定！&lt;/p&gt; &lt;p&gt;请访问 &lt;a href=https://community.kde.org/Get_Involved&gt;https://community.kde.org/Get_Involved&lt;/a&gt; 来物色您感兴趣的项目。&lt;/p&gt;如需了解更多相关信息和文档，请访问 &lt;a href=https://techbase.kde.org/&gt;https://techbase.kde.org/&lt;/a&gt;。</string>
@@ -391,12 +398,18 @@
   <string name="maxim_leshchenko_task">界面改进和此关于页面</string>
   <string name="holger_kaelberer_task">远程键盘插件和程序缺陷修正</string>
   <string name="saikrishna_arcot_task">支持在远程输入插件中使用键盘、程序缺陷修正和常规改进</string>
+  <string name="shellwen_chen_task">改进 SFTP 的安全性，改进此项目的可维护性，修复程序缺陷和常规改进</string>
   <string name="everyone_else">以及多年来为 KDE Connect 作出过贡献的其他所有人</string>
   <string name="send_clipboard">发送剪贴板</string>
   <string name="tap_to_execute">轻触执行</string>
   <string name="plugin_stats">插件状态</string>
   <string name="enable_udp_broadcast">启用 UPnP 设备发现</string>
+  <string name="enable_bluetooth">启用蓝牙 (测试)</string>
   <string name="receive_notifications_permission_explanation">需要允许通知才能从其他设备接收通知</string>
   <string name="findmyphone_notifications_explanation">需要通知权限，这样当应用程序处于后台时手机可以发出铃声</string>
   <string name="no_notifications">通知已禁用，您将不会收到传入的配对通知。</string>
+  <string name="mpris_keepwatching">继续播放</string>
+  <string name="mpris_keepwatching_settings_title">继续播放</string>
+  <string name="mpris_keepwatching_settings_summary">关闭媒体后显示一条用于继续在此设备上播放的静音通知</string>
+  <string name="notification_channel_keepwatching">继续播放</string>
 </resources>

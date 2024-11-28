@@ -18,7 +18,6 @@
   <string name="pref_plugin_clipboard_sent">Iškarpinė išsiųsta</string>
   <string name="pref_plugin_mousepad">Nuotolinis įvedimas</string>
   <string name="pref_plugin_mousepad_desc">Naudoti savo telefoną ar planšetę kaip jutiklinį kilimėlį ir klaviatūrą</string>
-  <string name="pref_plugin_presenter">Nuotolinis skaidrių rodymas</string>
   <string name="pref_plugin_presenter_desc">Naudoti savo įrenginį pateikties skaidrių keitimui</string>
   <string name="pref_plugin_remotekeyboard">Gauti nuotolinius klavišų paspaudimus</string>
   <string name="pref_plugin_remotekeyboard_desc">Gauti klavišų paspaudimo įvykius iš nuotolinių įrenginių</string>
@@ -110,11 +109,9 @@
   <string name="error_canceled_by_user">Naudotojas atsisakė</string>
   <string name="error_canceled_by_other_peer">Lygiarangis atsisakė</string>
   <string name="encryption_info_title">Šifravimo informacija</string>
-  <string name="encryption_info_msg_no_ssl">Kitas įrenginys nenaudoja paskiausios KDE Connect versijos, naudojamas pasenęs šifravimo metodas.</string>
   <string name="my_device_fingerprint">Jūsų įrenginio liudijimo SHA256 kontrolinis kodas yra:</string>
   <string name="remote_device_fingerprint">Nuotolinio įrenginio liudijimo SHA256 kontrolinis kodas yra:</string>
   <string name="pair_requested">Užklaustas suporavimas</string>
-  <string name="pairing_request_from">Suporavimo užklausa iš %1s</string>
   <plurals name="incoming_file_title">
     <item quantity="one">Gaunamas %1$d failas iš %2$s</item>
     <item quantity="few">Gaunami %1$d failai iš %2$s</item>
@@ -195,7 +192,6 @@
   </string-array>
   <string name="mpris_notification_settings_title">Rodyti įvairialypės terpės valdymo pranešimus</string>
   <string name="mpris_notification_settings_summary">Leisti valdyti medijos leistuves neatveriant KDE Connect</string>
-  <string name="share_to">Bendrinti su…</string>
   <string name="protocol_version_newer">Šis įrenginys naudoja naujesnę protokolo versiją</string>
   <string name="plugin_settings_with_name">%s nuostatos</string>
   <string name="invalid_device_name">Netinkamas įrenginio pavadinimas</string>
@@ -265,7 +261,6 @@
   <string name="telephony_pref_blocked_title">Užblokuoti numeriai</string>
   <string name="telephony_pref_blocked_dialog_desc">Nerodyti skambučių ir SMS žinučių iš šių numerių. Nurodykite kiekvienoje eilutėje po vieną</string>
   <string name="mpris_coverart_description">Dabartinės įvairialypės terpės iliustracija</string>
-  <string name="device_icon_description">Įrenginio piktograma</string>
   <string name="settings_icon_description">Nuostatų piktograma</string>
   <string name="presenter_fullscreen">Visas ekranas</string>
   <string name="presenter_exit">Išeiti iš pristatymo</string>

@@ -13,6 +13,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -49,13 +50,14 @@ public class MousePadActivity
 
     private float mPrevX;
     private float mPrevY;
-    private float mCurrentX;
-    private float mCurrentY;
+    boolean dragging = false;
     private float mCurrentSensitivity;
     private float displayDpiMultiplier;
     private int scrollDirection = 1;
+    private double scrollCoefficient = 1.0;
     private boolean allowGyro = false;
     private boolean gyroEnabled = false;
+    private boolean doubleTapDragEnabled = false;
     private int gyroscopeSensitivity = 100;
     private boolean isScrolling = false;
     private float accumulatedDistanceY = 0;
@@ -301,8 +303,8 @@ public class MousePadActivity
                 mPrevY = event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                mCurrentX = event.getX();
-                mCurrentY = event.getY();
+                float mCurrentX = event.getX();
+                float mCurrentY = event.getY();
 
                 MousePadPlugin plugin = KdeConnect.getInstance().getDevicePlugin(deviceId, MousePadPlugin.class);
                 if (plugin == null) {
@@ -368,7 +370,7 @@ public class MousePadActivity
 
         isScrolling = true;
 
-        accumulatedDistanceY += distanceY;
+        accumulatedDistanceY += distanceY * scrollCoefficient;
         if (accumulatedDistanceY > MinDistanceToSendScroll || accumulatedDistanceY < -MinDistanceToSendScroll) {
             sendScroll(scrollDirection * accumulatedDistanceY);
 
@@ -380,13 +382,16 @@ public class MousePadActivity
 
     @Override
     public void onLongPress(MotionEvent e) {
-        getWindow().getDecorView().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        MousePadPlugin plugin = KdeConnect.getInstance().getDevicePlugin(deviceId, MousePadPlugin.class);
-        if (plugin == null) {
-            finish();
-            return;
-        }
-        plugin.sendSingleHold();
+        if (!doubleTapDragEnabled) {
+            getWindow().getDecorView().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            MousePadPlugin plugin = KdeConnect.getInstance().getDevicePlugin(deviceId, MousePadPlugin.class);
+            if (plugin == null) {
+                finish();
+                return;
+            }
+            plugin.sendSingleHold();
+            dragging = true;
+        }   
     }
 
     @Override
@@ -418,13 +423,18 @@ public class MousePadActivity
             finish();
             return true;
         }
-        plugin.sendDoubleClick();
+        if (doubleTapDragEnabled) {
+            plugin.sendSingleHold();
+            dragging = true;
+        } else {
+            plugin.sendDoubleClick();
+        }
         return true;
     }
 
     @Override
     public boolean onDoubleTapEvent(MotionEvent e) {
-        return false;
+        return true;
     }
 
     @Override
@@ -473,7 +483,12 @@ public class MousePadActivity
             finish();
             return;
         }
-        plugin.sendLeftClick();
+        if (dragging) {
+            plugin.sendSingleRelease();
+            dragging = false;
+        } else {
+            plugin.sendLeftClick();
+        }
     }
 
     private void sendMiddleClick() {
@@ -525,6 +540,10 @@ public class MousePadActivity
             scrollDirection = 1;
         }
 
+        int scrollSensitivity = prefs.getInt(getString(R.string.mousepad_scroll_sensitivity), 100);
+        if (scrollSensitivity == 0) scrollSensitivity = 1;
+        scrollCoefficient = Math.pow((scrollSensitivity / 100f), 1.5);
+
         allowGyro = isGyroSensorAvailable() && prefs.getBoolean(getString(R.string.gyro_mouse_enabled), false);
         if (allowGyro)
             gyroscopeSensitivity = prefs.getInt(getString(R.string.gyro_mouse_sensitivity), 100);
@@ -573,6 +592,8 @@ public class MousePadActivity
         } else {
             findViewById(R.id.mouse_buttons).setVisibility(View.GONE);
         }
+
+        doubleTapDragEnabled = prefs.getBoolean(getString(R.string.mousepad_doubletap_drag_enabled_pref), true);
 
         prefsApplied = true;
     }

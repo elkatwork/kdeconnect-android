@@ -18,7 +18,6 @@
   <string name="pref_plugin_clipboard_sent">பிடிப்புப்பலகை அனுப்பப்பட்டது</string>
   <string name="pref_plugin_mousepad">தொலை உள்ளீடு</string>
   <string name="pref_plugin_mousepad_desc">உங்கள் திறன்பேசியை தொடுபலகை அல்லது விசைப்பலகையாக பயன்படுத்துங்கள்</string>
-  <string name="pref_plugin_presenter">வில்லைக்காட்சி தொலையியக்கி</string>
   <string name="pref_plugin_presenter_desc">"உங்கள் சாதனத்தைக் கொண்டு வில்லைக்காட்சியில்  (slideshow) காட்சிகளை மாற்றுங்கள்"</string>
   <string name="pref_plugin_remotekeyboard">தொலை விசைகளை பெறு</string>
   <string name="pref_plugin_remotekeyboard_desc">தொலை சாதனங்களிலிருந்து விசையழுத்தல்களைப் பெறும்</string>
@@ -60,6 +59,7 @@
   <string name="mousepad_mouse_buttons_title">சுட்டி பட்டன்களைக் காட்டு</string>
   <string name="mousepad_acceleration_profile_settings_title">சுட்டிக்குறியின் வேகவளர்ச்சியை அமை</string>
   <string name="mousepad_scroll_direction_title">உருளல் திசையை புரட்டு</string>
+  <string name="mousepad_scroll_sensitivity_title">உருளலுக்கான உணர்வுத்திறம்</string>
   <string name="gyro_mouse_enabled_title">சுழல்காட்டி சுட்டியை இயக்கு</string>
   <string name="gyro_mouse_sensitivity_title">சுழல்காட்டியின் உணர்வுத்திறம்</string>
   <string-array name="mousepad_tap_entries">
@@ -116,11 +116,9 @@
   <string name="error_canceled_by_user">பயனரால் ரத்து செய்யப்பட்டது</string>
   <string name="error_canceled_by_other_peer">மறு சாதனத்தால் ரத்து செய்யப்பட்டது</string>
   <string name="encryption_info_title">மறையாக்க விவரங்கள்</string>
-  <string name="encryption_info_msg_no_ssl">மறு சாதனம் கே.டீ.யீ. கனெக்டின் சமீபமான பதிப்பை பயன்படுத்தவில்லை. பழைய மறையாக்க முறை பயன்படுத்தப்படுகிறது.</string>
   <string name="my_device_fingerprint">உங்கள் சாதனச் சான்றிதழின் SHA256 சரிகாண்தொகை:</string>
   <string name="remote_device_fingerprint">தொலை சாதனச் சான்றிதழின் SHA256 சரிகாண்தொகை:</string>
   <string name="pair_requested">இணைப்பு கோரப்பட்டது</string>
-  <string name="pairing_request_from">%1s இலிருந்து இணைப்பு கோரிக்கை</string>
   <plurals name="incoming_file_title">
     <item quantity="one">%2$s இலிருந்து %1$d கோப்பு பெறப்படுகிறது</item>
     <item quantity="other">%2$s இருந்து %1$d கோப்புகள் பெறப்படுகின்றன</item>
@@ -186,7 +184,6 @@
   <string name="mpris_notifications_explanation">தொலை ஊடக இயக்கிகளை அறிவிப்புகளில் காட்டுவதற்கு அறிவிப்புகள் அனுமதி தேவை</string>
   <string name="mpris_notification_settings_title">ஊடக கட்டுப்பாடு அறிவிப்பைக் காட்டு</string>
   <string name="mpris_notification_settings_summary">கே.டீ.யீ. கனெக்டைத் திறக்காமல் ஊடக இயக்கிகளைக் கட்டுப்படுத்த உதவும்</string>
-  <string name="share_to">இதற்கு பகிர்...</string>
   <string name="protocol_version_newer">இச்சாதனம் புதிய நெறிமுறை பதிப்பைப் பயன்படுத்துகிறது</string>
   <string name="plugin_settings_with_name">%s அமைப்புகள்</string>
   <string name="invalid_device_name">முறையற்ற சாதன பெயர்</string>
@@ -263,7 +260,6 @@
   <string name="telephony_pref_blocked_title">தடுக்கப்பட்ட எண்கள்</string>
   <string name="telephony_pref_blocked_dialog_desc">இந்த எண்களிலிருந்து அழைப்புகள் மற்றும் SMS-கள் காட்டப்படா. வரிக்கு ஓர் எண்ணை மட்டும் குறிப்பிடவும்</string>
   <string name="mpris_coverart_description">தற்போதைய ஊடகத்தின் அட்டை படம்</string>
-  <string name="device_icon_description">சாதன சின்னம்</string>
   <string name="settings_icon_description">அமைப்புகளுக்கான சின்னம்</string>
   <string name="presenter_fullscreen">முழுத்திரை</string>
   <string name="presenter_exit">வில்லைக்காட்சியிலிருந்து வெளியேறு</string>

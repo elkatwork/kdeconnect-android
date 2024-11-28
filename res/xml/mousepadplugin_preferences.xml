@@ -63,6 +63,13 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
         android:key="@string/mousepad_scroll_direction"
         android:title="@string/mousepad_scroll_direction_title" />
 
+    <SeekBarPreference
+        android:id="@+id/mousepad_scroll_sensitivity_pref"
+        android:defaultValue="100"
+        android:key="@string/mousepad_scroll_sensitivity"
+        android:title="@string/mousepad_scroll_sensitivity_title"
+        android:layout_width="wrap_content" />
+
 
     <SwitchPreference
         android:id="@+id/gyro_mouse_enabled"
@@ -88,6 +95,15 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
         android:defaultValue="172.23.42.82"
         android:key="@string/mousepad_denon_receiver_address"
         android:title="@string/mousepad_denon_receiver_address_title" />
+
+    <SwitchPreference
+        android:id="@+id/mousepad_double_tap_drag_enabled_pref"
+        android:defaultValue="true"
+        android:key="@string/mousepad_doubletap_drag_enabled_pref"
+        android:title="Drag and drop behavior"
+        android:summaryOn="@string/double_tap_to_drag"
+        android:summaryOff="@string/hold_to_drag"
+        />
 
 
     <org.kde.kdeconnect.Helpers.LongSummaryPreferenceCategory

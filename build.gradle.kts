@@ -1,6 +1,15 @@
+import com.android.build.api.instrumentation.AsmClassVisitorFactory
+import com.android.build.api.instrumentation.ClassContext
+import com.android.build.api.instrumentation.ClassData
+import com.android.build.api.instrumentation.InstrumentationParameters
+import com.android.build.api.instrumentation.InstrumentationScope
 import com.github.jk1.license.LicenseReportExtension
 import com.github.jk1.license.render.ReportRenderer
 import com.github.jk1.license.render.TextReportRenderer
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes.CHECKCAST
+import org.objectweb.asm.Opcodes.INVOKESTATIC
 
 buildscript {
     dependencies {
@@ -9,11 +18,12 @@ buildscript {
     }
 }
 
-@Suppress("DSL_SCOPE_VIOLATION")    // TODO: remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.dependencyLicenseReport)
+    alias(libs.plugins.compose.compiler)
 }
 
 val licenseResDir = File("$projectDir/build/dependency-license-res")
@@ -38,30 +48,27 @@ fun String.runCommand(
 
 android {
     namespace = "org.kde.kdeconnect_tp"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 35
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
     }
     buildFeatures {
         viewBinding = true
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        buildConfig = true
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_9
+        targetCompatibility = JavaVersion.VERSION_1_9
 
         // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "9"
     }
 
     androidResources {
@@ -95,12 +102,10 @@ android {
     }
     buildTypes {
         getByName("debug") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             signingConfig = signingConfigs.getByName("debug")
         }
-        // keep minifyEnabled false above for faster builds; set to 'true'
-        // when testing to make sure ProGuard/R8 is not deleting important stuff
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -109,19 +114,6 @@ android {
     lint {
         abortOnError = false
         checkReleaseBuilds = false
-    }
-
-    testOptions {
-        unitTests.all {
-            it.jvmArgs = it.jvmArgs.orEmpty() + listOf(
-                    "--add-opens=java.base/java.lang=ALL-UNNAMED",
-                    "--add-opens=java.base/java.security=ALL-UNNAMED",
-                    "--add-opens=java.base/sun.security.rsa=ALL-UNNAMED",
-                    "--add-opens=java.base/sun.security.x509=ALL-UNNAMED",
-                    "--add-opens=java.base/java.util=ALL-UNNAMED",
-                    "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED"
-            )
-        }
     }
 
     applicationVariants.all {
@@ -137,7 +129,7 @@ android {
                     try {
                         val hash = "git rev-parse --short HEAD".runCommand(workingDir = rootDir)
                         val newName = "${project.name}-${variant.name}-${hash}.apk"
-                        logger.quiet("    Found an output file ${output.outputFile.name}, renaming to ${newName}")
+                        logger.quiet("    Found an output file ${output.outputFile.name}, renaming to $newName")
                         output.outputFileName = newName
                     } catch (ignored: Exception) {
                         logger.warn("Could not make use of the 'git' command-line tool. Output filenames will not be customized.")
@@ -148,13 +140,143 @@ android {
     }
 }
 
+/**
+ * Fix PosixFilePermission class type check issue.
+ *
+ * It fixed the class cast exception when lib desugar enabled and minSdk < 26.
+ */
+abstract class FixPosixFilePermissionClassVisitorFactory :
+    AsmClassVisitorFactory<FixPosixFilePermissionClassVisitorFactory.Params> {
+
+    override fun createClassVisitor(
+        classContext: ClassContext,
+        nextClassVisitor: ClassVisitor
+    ): ClassVisitor {
+        return object : ClassVisitor(instrumentationContext.apiVersion.get(), nextClassVisitor) {
+            override fun visitMethod(
+                access: Int,
+                name: String?,
+                descriptor: String?,
+                signature: String?,
+                exceptions: Array<out String>?
+            ): MethodVisitor {
+                if (name == "attributesToPermissions") { // org.apache.sshd.sftp.common.SftpHelper.attributesToPermissions
+                    return object : MethodVisitor(
+                        instrumentationContext.apiVersion.get(),
+                        super.visitMethod(access, name, descriptor, signature, exceptions)
+                    ) {
+                        override fun visitTypeInsn(opcode: Int, type: String?) {
+                            // We need to prevent Android Desugar modifying the `PosixFilePermission` classname.
+                            //
+                            // Android Desugar will replace `CHECKCAST java/nio/file/attribute/PosixFilePermission`
+                            // to `CHECKCAST j$/nio/file/attribute/PosixFilePermission`.
+                            // We need to replace it with `CHECKCAST java/lang/Enum` to prevent Android Desugar from modifying it.
+                            if (opcode == CHECKCAST && type == "java/nio/file/attribute/PosixFilePermission") {
+                                println("Bypass PosixFilePermission type check success.")
+                                // `Enum` is the superclass of `PosixFilePermission`.
+                                // Due to `Object` is not the superclass of `Enum`, we need to use `Enum` instead of `Object`.
+                                super.visitTypeInsn(opcode, "java/lang/Enum")
+                            } else {
+                                super.visitTypeInsn(opcode, type)
+                            }
+                        }
+                    }
+                }
+                return super.visitMethod(access, name, descriptor, signature, exceptions)
+            }
+        }
+    }
+
+    override fun isInstrumentable(classData: ClassData): Boolean {
+        return (classData.className == "org.apache.sshd.sftp.common.SftpHelper").also {
+            if (it) println("SftpHelper Found! Instrumenting...")
+        }
+    }
+
+    interface Params : InstrumentationParameters
+}
+
+/**
+ * Collections.unmodifiableXXX is not exist when Android API level is lower than 26.
+ * So we replace the call to Collections.unmodifiableXXX with the original collection by removing the call.
+ */
+abstract class FixCollectionsClassVisitorFactory :
+    AsmClassVisitorFactory<FixCollectionsClassVisitorFactory.Params> {
+    override fun createClassVisitor(
+        classContext: ClassContext,
+        nextClassVisitor: ClassVisitor
+    ): ClassVisitor {
+        return object : ClassVisitor(instrumentationContext.apiVersion.get(), nextClassVisitor) {
+            override fun visitMethod(
+                access: Int,
+                name: String?,
+                descriptor: String?,
+                signature: String?,
+                exceptions: Array<out String>?
+            ): MethodVisitor {
+                return object : MethodVisitor(
+                    instrumentationContext.apiVersion.get(),
+                    super.visitMethod(access, name, descriptor, signature, exceptions)
+                ) {
+                    override fun visitMethodInsn(
+                        opcode: Int,
+                        type: String?,
+                        name: String?,
+                        descriptor: String?,
+                        isInterface: Boolean
+                    ) {
+                        val backportClass = "org/kde/kdeconnect/Helpers/CollectionsBackport"
+
+                        if (opcode == INVOKESTATIC && type == "java/util/Collections") {
+                            val replaceRules = mapOf(
+                                "unmodifiableNavigableSet" to "(Ljava/util/NavigableSet;)Ljava/util/NavigableSet;",
+                                "unmodifiableSet" to "(Ljava/util/Set;)Ljava/util/Set;",
+                                "unmodifiableNavigableMap" to "(Ljava/util/NavigableMap;)Ljava/util/NavigableMap;",
+                                "emptyNavigableMap" to "()Ljava/util/NavigableMap;")
+                            if (name in replaceRules && descriptor == replaceRules[name]) {
+                                super.visitMethodInsn(opcode, backportClass, name, descriptor, isInterface)
+                                val calleeClass = classContext.currentClassData.className
+                                println("Replace Collections.$name call with CollectionsBackport.$name from $calleeClass success.")
+                                return
+                            }
+                        }
+                        super.visitMethodInsn(opcode, type, name, descriptor, isInterface)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun isInstrumentable(classData: ClassData): Boolean {
+        return classData.className.startsWith("org.apache.sshd") // We only need to fix the Apache SSHD library
+    }
+
+    interface Params : InstrumentationParameters
+}
+
+androidComponents {
+    onVariants { variant ->
+        variant.instrumentation.transformClassesWith(
+            FixPosixFilePermissionClassVisitorFactory::class.java,
+            InstrumentationScope.ALL
+        ) { }
+        variant.instrumentation.transformClassesWith(
+            FixCollectionsClassVisitorFactory::class.java,
+            InstrumentationScope.ALL
+        ) { }
+    }
+}
+
 dependencies {
-    coreLibraryDesugaring(libs.android.desugarJdkLibs)
+    // It has a bug that causes a crash when using PosixFilePermission and minSdk < 26.
+    // It has been used in SSHD Core.
+    // We have taken a workaround to fix it.
+    // See `FixPosixFilePermissionClassVisitorFactory` for more details.
+    coreLibraryDesugaring(libs.android.desugarJdkLibsNio)
 
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.accompanist.themeadapter.material3) // TODO: Remove deprecated library https://google.github.io/accompanist/themeadapter-material3/
     implementation(libs.androidx.constraintlayout.compose)
 
     implementation(libs.androidx.compose.ui.tooling.preview)
@@ -177,13 +299,16 @@ dependencies {
     implementation(libs.slf4j.handroid)
 
     implementation(libs.apache.sshd.core)
-    implementation(libs.apache.mina.core) //For some reason, makes sshd-core:0.14.0 work without NIO, which isn't available until Android 8 (api 26)
+    implementation(libs.apache.sshd.sftp)
+    implementation(libs.apache.sshd.scp)
+    implementation(libs.apache.sshd.mina)
+    implementation(libs.apache.mina.core)
 
     //implementation("com.github.bright:slf4android:0.1.6") { transitive = true } // For org.apache.sshd debugging
     implementation(libs.bcpkix.jdk15on) //For SSL certificate generation
 
     implementation(libs.classindex)
-    annotationProcessor(libs.classindex)
+    kapt(libs.classindex)
 
     // The android-smsmms library is the only way I know to handle MMS in Android
     // (Shouldn't a phone OS make phone things easy?)
@@ -207,10 +332,7 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
-    testImplementation(libs.powermock.core)
-    testImplementation(libs.powermock.module.junit4)
-    testImplementation(libs.powermock.api.mockito2)
-    testImplementation(libs.mockito.core) // powermock isn't compatible with mockito 4
+    testImplementation(libs.mockito.core)
     testImplementation(libs.jsonassert)
 
     // For device controls

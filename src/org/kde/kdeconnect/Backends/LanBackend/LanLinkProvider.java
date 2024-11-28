@@ -108,13 +108,15 @@ public class LanLinkProvider extends BaseLinkProvider {
             return;
         }
 
-        if (!networkPacket.getType().equals(NetworkPacket.PACKET_TYPE_IDENTITY)) {
-            Log.e("KDE/LanLinkProvider", "Expecting an identity packet instead of " + networkPacket.getType());
+        Log.i("KDE/LanLinkProvider", "identity packet received from a TCP connection from " + networkPacket.getString("deviceName"));
+
+        boolean deviceTrusted = isDeviceTrusted(networkPacket.getString("deviceId"));
+        if (!deviceTrusted && !TrustedNetworkHelper.isTrustedNetwork(context)) {
+            Log.i("KDE/LanLinkProvider", "Ignoring identity packet because the device is not trusted and I'm not on a trusted network.");
             return;
         }
 
-        Log.i("KDE/LanLinkProvider", "identity packet received from a TCP connection from " + networkPacket.getString("deviceName"));
-        identityPacketReceived(networkPacket, socket, LanLink.ConnectionStarted.Locally);
+        identityPacketReceived(networkPacket, socket, LanLink.ConnectionStarted.Locally, deviceTrusted);
     }
 
     //I've received their broadcast and should connect to their TCP socket and send my identity.
@@ -125,12 +127,13 @@ public class LanLinkProvider extends BaseLinkProvider {
 
         String message = new String(packet.getData(), Charsets.UTF_8);
         final NetworkPacket identityPacket = NetworkPacket.unserialize(message);
-        final String deviceId = identityPacket.getString("deviceId");
-        if (!identityPacket.getType().equals(NetworkPacket.PACKET_TYPE_IDENTITY)) {
-            Log.e("KDE/LanLinkProvider", "Expecting an UDP identity packet");
+
+        if (!DeviceInfo.isValidIdentityPacket(identityPacket)) {
+            Log.w("KDE/LanLinkProvider", "Invalid identity packet received.");
             return;
         }
 
+        final String deviceId = identityPacket.getString("deviceId");
         String myId = DeviceHelper.getDeviceId(context);
         if (deviceId.equals(myId)) {
             //Ignore my own broadcast
@@ -153,6 +156,12 @@ public class LanLinkProvider extends BaseLinkProvider {
 
         Log.i("KDE/LanLinkProvider", "Broadcast identity packet received from " + identityPacket.getString("deviceName"));
 
+        boolean deviceTrusted = isDeviceTrusted(identityPacket.getString("deviceId"));
+        if (!deviceTrusted && !TrustedNetworkHelper.isTrustedNetwork(context)) {
+            Log.i("KDE/LanLinkProvider", "Ignoring identity packet because the device is not trusted and I'm not on a trusted network.");
+            return;
+        }
+
         SocketFactory socketFactory = SocketFactory.getDefault();
         Socket socket = socketFactory.createSocket(address, tcpPort);
         configureSocket(socket);
@@ -164,7 +173,7 @@ public class LanLinkProvider extends BaseLinkProvider {
         out.write(myIdentity.serialize().getBytes());
         out.flush();
 
-        identityPacketReceived(identityPacket, socket, LanLink.ConnectionStarted.Remotely);
+        identityPacketReceived(identityPacket, socket, LanLink.ConnectionStarted.Remotely, deviceTrusted);
     }
 
     private void configureSocket(Socket socket) {
@@ -173,6 +182,11 @@ public class LanLinkProvider extends BaseLinkProvider {
         } catch (SocketException e) {
             Log.e("LanLink", "Exception", e);
         }
+    }
+
+    private boolean isDeviceTrusted(String deviceId) {
+        SharedPreferences preferences = context.getSharedPreferences("trusted_devices", Context.MODE_PRIVATE);
+        return preferences.getBoolean(deviceId, false);
     }
 
     /**
@@ -188,9 +202,15 @@ public class LanLinkProvider extends BaseLinkProvider {
      * @param identityPacket    identity of a remote device
      * @param socket            a new Socket, which should be used to receive packets from the remote device
      * @param connectionStarted which side started this connection
+     * @param deviceTrusted     whether the packet comes from a trusted device
      */
     @WorkerThread
-    private void identityPacketReceived(final NetworkPacket identityPacket, final Socket socket, final LanLink.ConnectionStarted connectionStarted) throws IOException {
+    private void identityPacketReceived(final NetworkPacket identityPacket, final Socket socket, final LanLink.ConnectionStarted connectionStarted, final boolean deviceTrusted) throws IOException {
+
+        if (!DeviceInfo.isValidIdentityPacket(identityPacket)) {
+            Log.w("KDE/LanLinkProvider", "Invalid identity packet received.");
+            return;
+        }
 
         String myId = DeviceHelper.getDeviceId(context);
         final String deviceId = identityPacket.getString("deviceId");
@@ -202,10 +222,7 @@ public class LanLinkProvider extends BaseLinkProvider {
         // If I'm the TCP server I will be the SSL client and viceversa.
         final boolean clientMode = (connectionStarted == LanLink.ConnectionStarted.Locally);
 
-        SharedPreferences preferences = context.getSharedPreferences("trusted_devices", Context.MODE_PRIVATE);
-        boolean isDeviceTrusted = preferences.getBoolean(deviceId, false);
-
-        if (isDeviceTrusted && !SslHelper.isCertificateStored(context, deviceId)) {
+        if (deviceTrusted && !SslHelper.isCertificateStored(context, deviceId)) {
             //Device paired with and old version, we can't use it as we lack the certificate
             Device device = KdeConnect.getInstance().getDevice(deviceId);
             if (device == null) {
@@ -213,20 +230,20 @@ public class LanLinkProvider extends BaseLinkProvider {
             }
             device.unpair();
             //Retry as unpaired
-            identityPacketReceived(identityPacket, socket, connectionStarted);
+            identityPacketReceived(identityPacket, socket, connectionStarted, deviceTrusted);
         }
 
         String deviceName = identityPacket.getString("deviceName", "unknown");
-        Log.i("KDE/LanLinkProvider", "Starting SSL handshake with " + deviceName + " trusted:" + isDeviceTrusted);
+        Log.i("KDE/LanLinkProvider", "Starting SSL handshake with " + deviceName + " trusted:" + deviceTrusted);
 
-        final SSLSocket sslSocket = SslHelper.convertToSslSocket(context, socket, deviceId, isDeviceTrusted, clientMode);
+        final SSLSocket sslSocket = SslHelper.convertToSslSocket(context, socket, deviceId, deviceTrusted, clientMode);
         sslSocket.addHandshakeCompletedListener(event -> {
             String mode = clientMode ? "client" : "server";
             try {
                 Certificate certificate = event.getPeerCertificates()[0];
                 DeviceInfo deviceInfo = DeviceInfo.fromIdentityPacketAndCert(identityPacket, certificate);
                 Log.i("KDE/LanLinkProvider", "Handshake as " + mode + " successful with " + deviceName + " secured with " + event.getCipherSuite());
-                addLink(sslSocket, deviceInfo);
+                addOrUpdateLink(sslSocket, deviceInfo);
             } catch (IOException e) {
                 Log.e("KDE/LanLinkProvider", "Handshake as " + mode + " failed with " + deviceName, e);
                 Device device = KdeConnect.getInstance().getDevice(deviceId);
@@ -248,9 +265,9 @@ public class LanLinkProvider extends BaseLinkProvider {
      *
      * @param socket           a new Socket, which should be used to send and receive packets from the remote device
      * @param deviceInfo       remote device info
-     * @throws IOException if an exception is thrown by {@link LanLink#reset(SSLSocket)}
+     * @throws IOException if an exception is thrown by {@link LanLink#reset(SSLSocket, DeviceInfo)}
      */
-    private void addLink(SSLSocket socket, DeviceInfo deviceInfo) throws IOException {
+    private void addOrUpdateLink(SSLSocket socket, DeviceInfo deviceInfo) throws IOException {
         LanLink link = visibleDevices.get(deviceInfo.id);
         if (link != null) {
             if (!link.getDeviceInfo().certificate.equals(deviceInfo.certificate)) {
@@ -259,7 +276,8 @@ public class LanLinkProvider extends BaseLinkProvider {
             }
             // Update existing link
             Log.d("KDE/LanLinkProvider", "Reusing same link for device " + deviceInfo.id);
-            final Socket oldSocket = link.reset(socket);
+            link.reset(socket, deviceInfo);
+            onDeviceInfoUpdated(deviceInfo);
         } else {
             // Create a new link
             Log.d("KDE/LanLinkProvider", "Creating a new link for device " + deviceInfo.id);

@@ -18,7 +18,7 @@
   <string name="pref_plugin_clipboard_sent">Klippbordet skickat</string>
   <string name="pref_plugin_mousepad">Extern inmatning</string>
   <string name="pref_plugin_mousepad_desc">Använd telefonen eller surfplattan som mus och tangentbord</string>
-  <string name="pref_plugin_presenter">Fjärrbildspel</string>
+  <string name="pref_plugin_presenter">Fjärrkontroll för presentation</string>
   <string name="pref_plugin_presenter_desc">Använd apparaten för att byta bilder i en presentation</string>
   <string name="pref_plugin_remotekeyboard">Ta emot externa tangentnedtryckningar</string>
   <string name="pref_plugin_remotekeyboard_desc">Ta emot tangentnedtryckningar från externa apparater</string>
@@ -52,7 +52,8 @@
   <string name="remotekeyboard_multiple_connections">Det finns mer än en anslutning till externt tangentbord, välj apparat att anpassa</string>
   <string name="open_mousepad">Extern inmatning</string>
   <string name="mousepad_info">Flytta fingret på skärmen för att röra muspekaren. Rör för att klicka, och använd två eller tre fingrar för höger- och mittenknapparna. Använd två fingrar för att panorera. Använd en längre beröring för drag och släpp. Musens gyroskopiska funktion kan aktiveras från insticksprogrammets inställningar.</string>
-  <string name="mousepad_keyboard_input_not_supported">Tangentbordsinmatning stöds inte av den ihopparade apparaten</string>
+  <string name="mousepad_info_no_gestures">Flytta ett finger på skärmen för att flytta muspekaren, rör för att klicka.</string>
+  <string name="mousepad_keyboard_input_not_supported">Tangentbordsinmatning stöds inte av den parkopplade apparaten</string>
   <string name="mousepad_single_tap_settings_title">Ställ in åtgärd vid en fingerberöring</string>
   <string name="mousepad_double_tap_settings_title">Ställ in åtgärd vid två fingerberöringar</string>
   <string name="mousepad_triple_tap_settings_title">Ställ in åtgärd vid tre fingerberöringar</string>
@@ -60,6 +61,7 @@
   <string name="mousepad_mouse_buttons_title">Visa musknappar</string>
   <string name="mousepad_acceleration_profile_settings_title">Ställ in pekaracceleration</string>
   <string name="mousepad_scroll_direction_title">Omvänd rullningsriktning</string>
+  <string name="mousepad_scroll_sensitivity_title">Rullningskänslighet</string>
   <string name="gyro_mouse_enabled_title">Aktivera gyroskopisk mus</string>
   <string name="gyro_mouse_sensitivity_title">Gyroskop-känslighet</string>
   <string-array name="mousepad_tap_entries">
@@ -106,21 +108,21 @@
   <string name="category_not_paired_devices">Tillgängliga apparater</string>
   <string name="category_remembered_devices">Ihågkomna apparater</string>
   <string name="device_menu_plugins">Inställningar av insticksprogram</string>
-  <string name="device_menu_unpair">Ta bort ihopparning</string>
+  <string name="device_menu_unpair">Ta bort parkoppling</string>
   <string name="pair_new_device">Para ihop ny apparat</string>
-  <string name="cancel_pairing">Avbryt ihopparning</string>
+  <string name="cancel_pairing">Avbryt parkoppling</string>
   <string name="unknown_device">Okänd apparat</string>
   <string name="error_not_reachable">Apparaten kan inte nås</string>
-  <string name="error_already_paired">Apparat redan ihopparad</string>
+  <string name="error_already_paired">Apparat redan parkopplad</string>
   <string name="error_timed_out">Tidsgräns överskriden</string>
   <string name="error_canceled_by_user">Avbruten av användaren</string>
   <string name="error_canceled_by_other_peer">Avbruten av motparten</string>
   <string name="encryption_info_title">Krypteringsinformation</string>
-  <string name="encryption_info_msg_no_ssl">Den andra apparaten använder inte en aktuell version av KDE-anslut. Använder den föråldrade krypteringsmetoden.</string>
   <string name="my_device_fingerprint">SHA256-fingeravtryck för din apparats certifikat är:</string>
   <string name="remote_device_fingerprint">SHA256-fingeravtryck för den andra apparatens certifikat är:</string>
-  <string name="pair_requested">Ihopparning begärd</string>
-  <string name="pairing_request_from">Begäran om ihopparning från %1s</string>
+  <string name="pair_requested">Parkoppling begärd</string>
+  <string name="pair_succeeded">Parkoppling lyckades</string>
+  <string name="pairing_request_from">Parkopplingsförfrågan från \'%1s\'</string>
   <plurals name="incoming_file_title">
     <item quantity="one">Tar emot %1$d fil från %2$s</item>
     <item quantity="other">Tar emot %1$d filer från %2$s</item>
@@ -157,11 +159,12 @@
   <string name="received_file_text">Rör för att öppna \'%1s\'</string>
   <string name="cannot_create_file">Kan inte skapa filen %s</string>
   <string name="tap_to_answer">Rör för att svara</string>
+  <string name="left_click">Skicka vänsterklick</string>
   <string name="right_click">Skicka högerklick</string>
   <string name="middle_click">Skicka mittenklick</string>
   <string name="show_keyboard">Visa tangentbord</string>
-  <string name="device_not_paired">Apparat inte ihopparad</string>
-  <string name="request_pairing">Begära ihopparning</string>
+  <string name="device_not_paired">Apparat inte parkopplad</string>
+  <string name="request_pairing">Begär parkoppling</string>
   <string name="pairing_accept">Acceptera</string>
   <string name="pairing_reject">Avslå</string>
   <string name="settings">Inställningar</string>
@@ -187,6 +190,8 @@
   <string name="mpris_notification_settings_title">Visa underrättelser om mediastyrning</string>
   <string name="mpris_notification_settings_summary">Tillåt att styra mediaspelare utan att KDE-anslut öppnas</string>
   <string name="share_to">Dela med…</string>
+  <string name="unreachable_device">%s (kan inte nås)</string>
+  <string name="unreachable_device_url_share_text">Webbadress som delas med en apparat som inte kan nås levereras till den när den väl blir möjlig att nå.\n\n</string>
   <string name="protocol_version_newer">Apparaten använder en nyare protokollversion</string>
   <string name="plugin_settings_with_name">Inställningar av %s</string>
   <string name="invalid_device_name">Ogiltigt apparatnamn</string>
@@ -232,7 +237,7 @@
   <string name="device_rename_title">Byt namn på apparat</string>
   <string name="device_rename_confirm">Byt namn</string>
   <string name="refresh">Uppdatera</string>
-  <string name="unreachable_description">Den här ihopparade apparaten kan inte nås. Försäkra dig om att den är ansluten till samma nätverk.</string>
+  <string name="unreachable_description">Den här parkopplade apparaten kan inte nås. Försäkra dig om att den är ansluten till samma nätverk.</string>
   <string name="no_wifi">Du är inte ansluten till ett WIFI-nätverk, så du kanske inte kan se alla apparater. Klicka här för att aktivera WIFI.</string>
   <string name="on_non_trusted_message">Använder inte ett pålitligt nätverk: automatisk upptäckt är inaktiverad.</string>
   <string name="no_file_browser">Det finns inga filbläddrare installerade.</string>
@@ -263,7 +268,6 @@
   <string name="telephony_pref_blocked_title">Blockerade nummer</string>
   <string name="telephony_pref_blocked_dialog_desc">Visa inte samtal och SMS från dessa nummer. Ange ett nummer per rad.</string>
   <string name="mpris_coverart_description">Omslag för aktuell media</string>
-  <string name="device_icon_description">Apparatikon</string>
   <string name="settings_icon_description">Inställningsikon</string>
   <string name="presenter_fullscreen">Fullskärm</string>
   <string name="presenter_exit">Avsluta presentation</string>
@@ -285,7 +289,7 @@
   <string name="copy_url_to_clipboard">Kopiera webbadress till klippbordet</string>
   <string name="clipboard_toast">Kopierad till klippbordet</string>
   <string name="runcommand_notreachable">Apparaten kan inte nås</string>
-  <string name="runcommand_notpaired">Apparat inte ihopparad</string>
+  <string name="runcommand_notpaired">Apparat inte parkopplad</string>
   <string name="runcommand_nosuchdevice">Det finns ingen sådan apparat</string>
   <string name="runcommand_noruncommandplugin">Apparaten har inte insticksprogrammet Kör kommando aktiverat</string>
   <string name="runcommand_category_device_controls_title">Apparatkontroller</string>
@@ -322,6 +326,7 @@
   <string name="empty_trusted_networks_list_text">Du har inte lagt till några pålitliga nätverk ännu</string>
   <string name="allow_all_networks_text">Tillåt alla</string>
   <string name="location_permission_needed_title">Rättighet krävs</string>
+  <string name="bluetooth_permission_needed_desc">KDE-anslut behöver behörighet för att ansluta till närliggande apparater för att göra apparater som är parkopplade med Blåtand tillgängliga i KDE-anslut.</string>
   <string name="location_permission_needed_desc">KDE-anslut behöver rättigheter för bakgrundsplats för att känna till WIFI-nätverket du är ansluten med även när programmet är i bakgrunden. Det beror på att namnen på WIFI-nätverk omkring dig skulle kunna användas för att ta reda på var du befinner dig, även om det inte är vad KDE-anslut gör.</string>
   <string name="clipboard_android_x_incompat">Android 10 har tagit bort åtkomst till klippbordet för alla applikationer. Det här insticksprogrammet kommer att inaktiveras.</string>
   <string name="mpris_open_url">Fortsätt spela här</string>
@@ -385,8 +390,11 @@
   <string name="send_compose">Skicka</string>
   <string name="compose_send_title">Skriv och skicka</string>
   <string name="open_compose_send">Skriv text</string>
+  <string name="double_tap_to_drag">Dubbeltryck för att dra</string>
+  <string name="hold_to_drag">Håll för att dra</string>
   <string name="about_kde_about">&lt;h1&gt;Om&lt;/h1&gt; &lt;p&gt;KDE är ett världsomspännande nätverk av programvaruingenjörer, grafiker, författare, översättare och kreatörer som är engagerade i utveckling av &lt;a href=https://www.gnu.org/philosophy/free-sw.html&gt;fri programvara&lt;/a&gt;. KDE producerar skrivbordsmiljön Plasma, hundratals program, och de talrika programvarubibliotek som stöder dem.&lt;/p&gt; &lt;p&gt;KDE är ett kooperativ, där ingen enskild person styr inriktningen eller produkterna. Istället arbetar vi tillsammans för att uppnå det gemensamma målet att skapa värdens finaste fria programvara. Alla är välkomna att &lt;a href=https://community.kde.org/Get_Involved&gt;gå med och bidra&lt;/a&gt; till KDE, inklusive du själv.&lt;/p&gt; Besök &lt;a href=https://www.kde.org/&gt;https://www.kde.org/&lt;/a&gt; för ytterligare information om KDE-gemenskapen och programvaran vi skapar.</string>
   <string name="about_kde_report_bugs_or_wishes">&lt;h1&gt;Rapportera fel eller önskemål&lt;/h1&gt; &lt;p&gt;Programvara kan alltid förbättras, och KDE-gruppen är beredd att göra det. Men du - användaren - måste berätta för oss om något inte fungerar som förväntat eller kunde ha gjorts bättre.&lt;/p&gt; &lt;p&gt;KDE har ett felrapporteringssystem. Besök &lt;a href=https://bugs.kde.org/&gt;https://bugs.kde.org/&lt;/a&gt; eller använd dialogrutan \"Rapportera fel...\" från om-skärmen för att rapportera fel.&lt;/p&gt; Om du har ett förslag på en förbättring kan du använda felrapporteringssystemet för att registrera din önskan. Se då till att du använder allvarlighetsgraden \"Önskan\".</string>
+  <string name="about_kde_join_kde">&lt;h1&gt;Gå med i KDE&lt;/h1&gt; &lt;p&gt;Du behöver inte vara en programutvecklare för att bli medlem i KDE-gruppen. Du kan gå med i de nationella grupperna som översätter programmens gränssnitt. Du kan bidra med grafik, teman, ljud och förbättrad dokumentation. Det är upp till dig!&lt;/p&gt; &lt;p&gt;Besök &lt;a href=https://community.kde.org/Get_Involved&gt;https://community.kde.org/Get_Involved&lt;/a&gt; för information om några projekt som du kan delta i.&lt;/p&gt;Om du behöver mer information eller dokumentation kommer ett besök på &lt;a href=https://techbase.kde.org/&gt;https://techbase.kde.org/&lt;/a&gt; att ge dig det du behöver.</string>
   <string name="about_kde_support_kde">&lt;h1&gt;Stöd KDE&lt;/h1&gt; &lt;p&gt;KDE är och kommer alltid att vara tillgängligt utan avgift, dock är det inte gratis att ta fram det.&lt;/p&gt; &lt;p&gt;För att stödja utvecklingen upprättade KDE-gruppen KDE e.V., en ideell organisation som juridiskt grundats i Tyskland. KDE e.V. representerar KDE-gemenskapen i juridiska och ekonomiska angelägenheter. Se &lt;a href=https://ev.kde.org/&gt;https://ev.kde.org/&lt;/a&gt; för information om KDE e.V.&lt;/p&gt; &lt;p&gt;KDE gagnas av många olika typer av bidrag, inklusive ekonomiska. Medlen används för att ersätta medlemmar och andra för utgifter som de åsamkas när de bidrar till KDE. Ytterligare medel används för juridiskt stöd och för att organisera konferenser och möten.&lt;/p&gt; &lt;p&gt;Vi vill gärna uppmuntra dig att stödja vårt arbete med en donation, på något av sätten som beskrivs på &lt;a href=https://www.kde.org/community/donations/&gt;https://www.kde.org/community/donations/&lt;/a&gt;.&lt;/p&gt;Tack på förhand för ditt stöd.</string>
   <string name="maintainer_and_developer">Underhåll och utvecklare</string>
   <string name="developer">Utvecklare</string>
@@ -398,12 +406,18 @@
   <string name="maxim_leshchenko_task">Förbättringar av användargränssnitt och den här om-sidan</string>
   <string name="holger_kaelberer_task">Insticksprogram för fjärrtangentbord och felrättningar</string>
   <string name="saikrishna_arcot_task">Stöd för användning av tangentbordet i insticksprogrammet för fjärrinmatning, felrättningar och allmänna förbättringar</string>
+  <string name="shellwen_chen_task">Förbättra säkerheten för SFTP, förbättra projektets underhållbarhet, felrättningar och allmänna förbättringar</string>
   <string name="everyone_else">Alla andra som har bidragit till KDE-anslut under alla år</string>
   <string name="send_clipboard">Skicka klippbord</string>
   <string name="tap_to_execute">Rör för att köra</string>
   <string name="plugin_stats">Insticksprogramstatistik</string>
   <string name="enable_udp_broadcast">Aktivera UDP-enhetsupptäckt</string>
+  <string name="enable_bluetooth">Aktivera Blåtand (beta)</string>
   <string name="receive_notifications_permission_explanation">Underrättelser måste vara tillåtna för att kunna ta emot dem från andra apparater</string>
   <string name="findmyphone_notifications_explanation">Underrättelserättigheter krävs så att telefonen kan ringa när programmet är i bakgrunden</string>
   <string name="no_notifications">Underrättelser är inaktiverade, så en underrättelse om inkommande begäran att para ihop inte tas emot.</string>
+  <string name="mpris_keepwatching">Fortsätt spela</string>
+  <string name="mpris_keepwatching_settings_title">Fortsätt spela</string>
+  <string name="mpris_keepwatching_settings_summary">Visa en tyst underrättelse för att fortsätta spela på apparaten efter att media har stängts.</string>
+  <string name="notification_channel_keepwatching">Fortsätt spela</string>
 </resources>

@@ -25,6 +25,8 @@ import org.kde.kdeconnect.Plugins.Plugin;
 import org.kde.kdeconnect.Plugins.PluginFactory;
 import org.kde.kdeconnect_tp.R;
 
+import java.util.Objects;
+
 @PluginFactory.LoadablePlugin
 public class ClipboardPlugin extends Plugin {
 
@@ -77,7 +79,9 @@ public class ClipboardPlugin extends Plugin {
                     return false;
                 }
 
-                ClipboardListener.instance(context).setText(content);
+                if (np.has("content")) { // change clipboard if content is in NetworkPacket
+                    ClipboardListener.instance(context).setText(content);
+                }
                 return true;
         }
         throw new UnsupportedOperationException("Unknown packet type: " + np.getType());
@@ -88,7 +92,7 @@ public class ClipboardPlugin extends Plugin {
     void propagateClipboard(String content) {
         NetworkPacket np = new NetworkPacket(ClipboardPlugin.PACKET_TYPE_CLIPBOARD);
         np.set("content", content);
-        device.sendPacket(np);
+        getDevice().sendPacket(np);
     }
 
     private void sendConnectPacket() {
@@ -97,7 +101,7 @@ public class ClipboardPlugin extends Plugin {
         long timestamp = ClipboardListener.instance(context).getUpdateTimestamp();
         np.set("timestamp", timestamp);
         np.set("content", content);
-        device.sendPacket(np);
+        getDevice().sendPacket(np);
     }
 
 
@@ -141,7 +145,7 @@ public class ClipboardPlugin extends Plugin {
 
     @Override
     public void startMainActivity(Activity activity) {
-        if (device != null) {
+        if (isDeviceInitialized()) {
             ClipboardManager clipboardManager = ContextCompat.getSystemService(this.context,
                     ClipboardManager.class);
             ClipData.Item item;

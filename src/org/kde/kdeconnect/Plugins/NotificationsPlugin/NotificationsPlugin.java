@@ -106,6 +106,10 @@ public class NotificationsPlugin extends Plugin implements NotificationReceiver.
 
     @Override
     public boolean checkRequiredPermissions() {
+        return hasNotificationsPermission();
+    }
+
+    private boolean hasNotificationsPermission() {
         //Notifications use a different kind of permission, because it was added before the current runtime permissions model
         String notificationListenerList = Settings.Secure.getString(context.getContentResolver(), "enabled_notification_listeners");
         return StringUtils.contains(notificationListenerList, context.getPackageName());
@@ -163,7 +167,7 @@ public class NotificationsPlugin extends Plugin implements NotificationReceiver.
         NetworkPacket np = new NetworkPacket(PACKET_TYPE_NOTIFICATION);
         np.set("id", id);
         np.set("isCancel", true);
-        device.sendPacket(np);
+        getDevice().sendPacket(np);
         currentNotifications.remove(id);
     }
 
@@ -265,7 +269,7 @@ public class NotificationsPlugin extends Plugin implements NotificationReceiver.
             np.set("text", extractText(notification, conversation));
         }
 
-        device.sendPacket(np);
+        getDevice().sendPacket(np);
     }
 
     private String extractText(Notification notification, Pair<String, String> conversation) {
@@ -506,11 +510,20 @@ public class NotificationsPlugin extends Plugin implements NotificationReceiver.
     }
 
     private void sendCurrentNotifications(NotificationReceiver service) {
-        StatusBarNotification[] notifications = service.getActiveNotifications();
-        if (notifications != null) { //Can happen only on API 23 and lower
-            for (StatusBarNotification notification : notifications) {
-                sendNotification(notification, true);
-            }
+        if (!hasNotificationsPermission()) {
+            return;
+        }
+        StatusBarNotification[] notifications;
+        try {
+            notifications = service.getActiveNotifications();
+        } catch (SecurityException e) {
+            return;
+        }
+        if (notifications == null) {
+            return; //Can happen only on API 23 and lower
+        }
+        for (StatusBarNotification notification : notifications) {
+            sendNotification(notification, true);
         }
     }
 

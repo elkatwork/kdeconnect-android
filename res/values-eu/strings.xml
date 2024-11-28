@@ -18,7 +18,7 @@
   <string name="pref_plugin_clipboard_sent">Arbelekoa bidali da</string>
   <string name="pref_plugin_mousepad">Urrutiko sarrera</string>
   <string name="pref_plugin_mousepad_desc">Erabili zure telefonoa edo tableta ukimen-sagu eta teklatu gisa</string>
-  <string name="pref_plugin_presenter">Diapositiba emanaldietarako telekomandoa</string>
+  <string name="pref_plugin_presenter">Aurkezpenetarako urruneko agintea</string>
   <string name="pref_plugin_presenter_desc">Erabili zure gailua aurkezpen bateko diapositibak aldatzeko</string>
   <string name="pref_plugin_remotekeyboard">Jaso urruneko tekla-sakatzeak</string>
   <string name="pref_plugin_remotekeyboard_desc">Jaso tekla-sakatze gertaerak urruneko gailuetatik</string>
@@ -52,6 +52,7 @@
   <string name="remotekeyboard_multiple_connections">Urruneko teklatuekin konexio bat baino gehiago dago, hautatu konfiguratu beharreko gailua</string>
   <string name="open_mousepad">Urruneko sarrera</string>
   <string name="mousepad_info">Mugitu hatz bat pantailan zehar saguaren erakuslea mugitzeko. Egin tak klik baterako, eta erabili bi/hiru hatz eskuin eta erdiko botoietarako. Erabili 2 hatz kiribiltzeko. Erabili sakatze luze bat arrastatu eta jaregiteko. Saguaren giroskopio funtzionalitatea pluginen hobespenetatik gaitu daiteke.</string>
+  <string name="mousepad_info_no_gestures">Mugitu hatz bat pantailan kurtsorea mugitzeko, egin tak klik egiteko.</string>
   <string name="mousepad_keyboard_input_not_supported">Parekatutako gailuak ez du teklatuko sarreraren euskarririk</string>
   <string name="mousepad_single_tap_settings_title">Ezarri hatz bakarrarekin tak egitearen ekintza</string>
   <string name="mousepad_double_tap_settings_title">Ezarri bi hatzez tak egitearen ekintza</string>
@@ -60,6 +61,7 @@
   <string name="mousepad_mouse_buttons_title">Erakutsi saguaren botoiak</string>
   <string name="mousepad_acceleration_profile_settings_title">Ezarri erakuslearen azelerazio</string>
   <string name="mousepad_scroll_direction_title">Alderantzikatu korritzearen norabidea</string>
+  <string name="mousepad_scroll_sensitivity_title">Kiribiltze sentikortasuna</string>
   <string name="gyro_mouse_enabled_title">Gaitu giroskopio-sagua</string>
   <string name="gyro_mouse_sensitivity_title">Giroskopioaren sentikortasuna</string>
   <string-array name="mousepad_tap_entries">
@@ -116,11 +118,11 @@
   <string name="error_canceled_by_user">Erabiltzaileak utzita</string>
   <string name="error_canceled_by_other_peer">Beste kideak utzita</string>
   <string name="encryption_info_title">Zifratze informazioa</string>
-  <string name="encryption_info_msg_no_ssl">Beste gailuak ez du oraintsuko KDE Connect bertsio bat erabiltzen, erabili aurreko bertsioetako metodoa.</string>
   <string name="my_device_fingerprint">Zure gailuaren ziurtagiriaren SHA256 hatz-marka:</string>
   <string name="remote_device_fingerprint">Urruneko gailuaren ziurtagiriaren SHA256 hatz-marka hau da:</string>
   <string name="pair_requested">Parekatzea eskatu da</string>
-  <string name="pairing_request_from">Parekatzeko eskaria %1s-tik</string>
+  <string name="pair_succeeded">Parekatze arrakastatsua</string>
+  <string name="pairing_request_from">\'%1s\'(e)ren parekatzeko eskaria</string>
   <plurals name="incoming_file_title">
     <item quantity="one">%2$s(e)tik fitxategi %1$d jasotzen</item>
     <item quantity="other">%2$s(e)tik %1$d fitxategi jasotzen</item>
@@ -157,6 +159,7 @@
   <string name="received_file_text">Tak egin \'%1s\' irekitzeko</string>
   <string name="cannot_create_file">Ezin da sortu %s fitxategia</string>
   <string name="tap_to_answer">Tak egin erantzuteko</string>
+  <string name="left_click">Bidali ezkerreko klik</string>
   <string name="right_click">Bidali eskumako klik</string>
   <string name="middle_click">Bidali erdiko klik</string>
   <string name="show_keyboard">Erakutsi teklatua</string>
@@ -187,6 +190,8 @@
   <string name="mpris_notification_settings_title">Erakutsi euskarri kontrolaren jakinarazpena</string>
   <string name="mpris_notification_settings_summary">Utzi zure euskarri-jotzaileak kontrolatzen KDE Connect ireki gabe</string>
   <string name="share_to">Partekatu honekin...</string>
+  <string name="unreachable_device">%s (eskuraezin)</string>
+  <string name="unreachable_device_url_share_text">Gailu eskuraezinekin partekatutako URLak, hartara bidaliko dira eskuragarri dagoenean.\n\n</string>
   <string name="protocol_version_newer">Gailu honek protokoloaren bertsio berriago bat erabiltzen du</string>
   <string name="plugin_settings_with_name">%s ezarpenak</string>
   <string name="invalid_device_name">Gailuaren izen baliogabea</string>
@@ -263,7 +268,6 @@
   <string name="telephony_pref_blocked_title">Blokeatutako zenbakiak</string>
   <string name="telephony_pref_blocked_dialog_desc">Ez erakutsi zenbaki hauen deiak eta SMSak. Zehaztu zenbaki bat lerroko</string>
   <string name="mpris_coverart_description">Uneko euskarriaren azaleko irudia</string>
-  <string name="device_icon_description">Gailuaren ikonoa</string>
   <string name="settings_icon_description">Ezarpenen ikonoa</string>
   <string name="presenter_fullscreen">Pantaila-betea</string>
   <string name="presenter_exit">Irten aurkezpenetik</string>
@@ -322,6 +326,7 @@
   <string name="empty_trusted_networks_list_text">Oraindik ez duzu gehitu konfiantza duen sarerik</string>
   <string name="allow_all_networks_text">Baimendu guztiak</string>
   <string name="location_permission_needed_title">Baimena beharrezkoa da</string>
+  <string name="bluetooth_permission_needed_desc">KDE Connect-ek hurbileko gailuetara konektatzeko baimena behar du, Bluetooth bidez parekatutako gailuak KDE Connect-en erabilgarri ipintzeko.</string>
   <string name="location_permission_needed_desc">KDE Connect-ek konektatuta zauden Wi-Fi sarea zein den jakiteko atzeko planoko kokapen baimena behar du, baita aplikazioa atzeko planoan dagoenean ere. Hori horrela da, zure inguruko Wi-Fi sareen izenak zure kokalekua aurkitzeko erabil daitezkeelako, nahiz eta hori ez izan KDE Connect-ek egiten duena.</string>
   <string name="clipboard_android_x_incompat">Android 10ek arbela atzitzeko aukera kendu die aplikazio guztiei. Plugin hau desgaitu egingo da.</string>
   <string name="mpris_open_url">Jarraitu hemen jotzen</string>
@@ -385,6 +390,8 @@
   <string name="send_compose">Bidali</string>
   <string name="compose_send_title">Bidalketa osatu</string>
   <string name="open_compose_send">Konposatu testua</string>
+  <string name="double_tap_to_drag">Tak bikoitza arrastatzeko</string>
+  <string name="hold_to_drag">Eutsi arrastatzeko</string>
   <string name="about_kde_about">"&lt;h1&gt;Honi buruz&lt;/h1&gt; &lt;p&gt;KDE &lt;a href=https://www.gnu.org/philosophy/free-sw.html&gt;Software Askearen&lt;/a&gt; garapenarekin engaiatutako mundu osoko software ingeniari, artista, idazle, itzultzaile eta sortzaile elkarte bat da. KDEk Plasma mahaigain ingurunea, ehunka aplikazio, eta haiei euskarria ematen dieten liburutegi ugariak ekoizten ditu. &lt;/p&gt; &lt;p&gt;KDE ekimen kooperatibo bat da: ez dago bere norabidea eta produktuak kontrolatzen dituen erakunderik. Aldiz, elkarrekin lan egiten dugu guztiok partekatzen dugun helburu bera lortzeko, munduko Software Aske bikainena eraikitzearena alegia. Jende oro ongi etorria da  KDErekin &lt;a href=https://community.kde.org/Get_Involved&gt;elkartu eta laguntza ematera&lt;/a&gt;, zu barne. &lt;/p&gt; Bisitatu &lt;a href=https://www.kde.org/&gt;https://www.kde.org/&lt;/a&gt; , KDE elkartearen eta ekoizten dugun softwarearen gaineko informazio zabalagoa eskuratzeko."</string>
   <string name="about_kde_report_bugs_or_wishes">&lt;h1&gt;Akatsen edo nahien berri ematea&lt;/h1&gt; &lt;p&gt;Softwarea beti hobetu daiteke, eta KDE taldea horretarako prest dago. Hala ere, zuk - erabiltzailea zaren horrek - zerbait behar bezala ez dabilenean edo hobeto egin daitekeenean esan egin behar diguzu.&lt;/p&gt; &lt;p&gt;KDEk programa-akatsen gaineko jarraipena egiteko sistema bat du. Bisitatu &lt;a href=https://bugs.kde.org/&gt;https://bugs.kde.org/&lt;/a&gt; edo erabili Honi buruz pantailako «Akatsa jakinarazi» botoia.&lt;/p&gt; Hobetzeko iradokizunik baduzu, akatsen jarraipen sisteman zure nahia erregistratzera gonbidatzen zaitugu. Larritasun maila bezala \"Wishlist\" (nahien zerrenda) erabil ezazu horretarako.</string>
   <string name="about_kde_join_kde">"&lt;h1&gt;Zatoz KDEra&lt;/h1&gt; &lt;p&gt;Ez duzu software garatzailea izan behar KDEren taldeko kide izateko. Programen interfazeak itzultzen dituzten hizkuntzen taldeetara batu zaitezke. Grafikoak, gaiak, soinuak, eta dokumentazio hobetua eskain ditzakezu. Zeuk erabaki!&lt;/p&gt; &lt;p&gt;Bisitatu &lt;a href=https://community.kde.org/Get_Involved&gt;https://community.kde.org/Get_Involved&lt;/a&gt;  parte hartu dezakezun proiektuen informazioa eskuratzeko.&lt;/p&gt; Informazio edo dokumentazio gehiago behar baduzu, &lt;a href=https://techbase.kde.org/&gt;https://techbase.kde.org/&lt;/a&gt; bisitatuz behar duzuna eskuratuko duzu."</string>
@@ -399,12 +406,18 @@
   <string name="maxim_leshchenko_task">Erabiltzaile-interfazean hobekuntzak eta Honi buru orria hau</string>
   <string name="holger_kaelberer_task">Urruneko teklatuaren plugina eta akatsen konponketa</string>
   <string name="saikrishna_arcot_task">Urruneko sarrerako pluginean teklatua erabiltzeko euskarria, akatsen konponketa eta hobekuntza orokorrak</string>
+  <string name="shellwen_chen_task">SFTPren segurtasuna hobetu, proiektu honen mantentze-gaitasuna hobetu, akatsak konpondu eta hobekuntza orokorrak</string>
   <string name="everyone_else">Urteetan KDE Connect-ekin lagundu duten gainerako guztiak</string>
   <string name="send_clipboard">Bidali arbelekoa</string>
   <string name="tap_to_execute">Tak egin exekutatzeko</string>
   <string name="plugin_stats">Pluginaren estatistikak</string>
   <string name="enable_udp_broadcast">Gaitu UDP bidez gailua aurkitzea</string>
+  <string name="enable_bluetooth">Gaitu bluetooth (beta)</string>
   <string name="receive_notifications_permission_explanation">Jakinarazpenak baimendu behar dira beste gailuetatik haiek jasotzeko</string>
   <string name="findmyphone_notifications_explanation">Aplikazioa atzeko planoan dagoenean telefonoak jo dezan jakinarazpen-baimena behar da</string>
   <string name="no_notifications">Jakinarazpenak ezgaituta daude, ez duzu jasoko parekatzeko sarrerako jakinarazpenik.</string>
+  <string name="mpris_keepwatching">Jarraitu jotzen</string>
+  <string name="mpris_keepwatching_settings_title">Jarraitu jotzen</string>
+  <string name="mpris_keepwatching_settings_summary">Hedabidea itxi ondoren, gailu honetan jotzen jarraitzeko jakinarazpen ixil bat erakutsi.</string>
+  <string name="notification_channel_keepwatching">Jarraitu jotzen</string>
 </resources>

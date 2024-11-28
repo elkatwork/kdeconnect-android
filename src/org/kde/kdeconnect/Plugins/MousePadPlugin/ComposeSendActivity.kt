@@ -24,11 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.preference.PreferenceManager
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import org.kde.kdeconnect.KdeConnect
 import org.kde.kdeconnect.NetworkPacket
 import org.kde.kdeconnect.UserInterface.compose.KdeTextButton
 import org.kde.kdeconnect.UserInterface.compose.KdeTextField
+import org.kde.kdeconnect.UserInterface.compose.KdeTheme
 import org.kde.kdeconnect.UserInterface.compose.KdeTopAppBar
 import org.kde.kdeconnect_tp.R
 
@@ -89,12 +89,13 @@ class ComposeSendActivity : AppCompatActivity() {
 
     @Composable
     private fun ComposeSendScreen() {
-        Mdc3Theme {
+        KdeTheme(this) {
             Scaffold(
                 topBar = {
                     KdeTopAppBar(
                         title = stringResource(R.string.compose_send_title),
                         navIconOnClick = { onBackPressedDispatcher.onBackPressed() },
+                        navIconDescription = getString(androidx.appcompat.R.string.abc_action_bar_up_description),
                         actions = {
                             KdeTextButton(
                                 modifier = Modifier.padding(horizontal = 8.dp),

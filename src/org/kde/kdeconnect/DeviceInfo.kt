@@ -9,7 +9,9 @@ package org.kde.kdeconnect
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import org.kde.kdeconnect.Helpers.DeviceHelper
 import org.kde.kdeconnect.Helpers.SecurityHelpers.SslHelper
 import org.kde.kdeconnect_tp.R
 import java.security.cert.Certificate
@@ -20,13 +22,13 @@ import java.security.cert.CertificateException
  * DeviceInfo contains all the properties needed to instantiate a Device.
  */
 class DeviceInfo(
-    @JvmField val id : String,
-    @JvmField val certificate : Certificate,
-    @JvmField var name : String,
-    @JvmField var type : DeviceType,
-    @JvmField var protocolVersion : Int = 0,
-    @JvmField var incomingCapabilities : Set<String>? = null,
-    @JvmField var outgoingCapabilities : Set<String>? = null,
+    @JvmField val id: String,
+    @JvmField val certificate: Certificate,
+    @JvmField var name: String,
+    @JvmField var type: DeviceType,
+    @JvmField var protocolVersion: Int = 0,
+    @JvmField var incomingCapabilities: Set<String>? = null,
+    @JvmField var outgoingCapabilities: Set<String>? = null,
 ) {
 
     /**
@@ -38,7 +40,7 @@ class DeviceInfo(
         try {
             val encodedCertificate = Base64.encodeToString(certificate.encoded, 0)
 
-            with (settings.edit()) {
+            with(settings.edit()) {
                 putString("certificate", encodedCertificate)
                 putString("deviceName", name)
                 putString("deviceType", type.toString())
@@ -60,8 +62,8 @@ class DeviceInfo(
             np.set("deviceName", name)
             np.set("protocolVersion", protocolVersion)
             np.set("deviceType", type.toString())
-            np.set("incomingCapabilities", incomingCapabilities)
-            np.set("outgoingCapabilities", outgoingCapabilities)
+            np.set("incomingCapabilities", incomingCapabilities!!)
+            np.set("outgoingCapabilities", outgoingCapabilities!!)
         }
 
     companion object {
@@ -71,7 +73,7 @@ class DeviceInfo(
          */
         @JvmStatic
         @Throws(CertificateException::class)
-        fun loadFromSettings(context : Context, deviceId: String, settings: SharedPreferences) =
+        fun loadFromSettings(context: Context, deviceId: String, settings: SharedPreferences) =
             with(settings) {
                 DeviceInfo(
                     id = deviceId,
@@ -89,8 +91,8 @@ class DeviceInfo(
         fun fromIdentityPacketAndCert(identityPacket: NetworkPacket, certificate: Certificate) =
             with(identityPacket) {
                 DeviceInfo(
-                    id = getString("deviceId"),
-                    name = getString("deviceName", "unknown"),
+                    id = getString("deviceId"), // Redundant: We could read this from the certificate instead
+                    name = DeviceHelper.filterName(getString("deviceName", "unknown")),
                     type = DeviceType.fromString(getString("deviceType", "desktop")),
                     certificate = certificate,
                     protocolVersion = getInt("protocolVersion"),
@@ -98,6 +100,13 @@ class DeviceInfo(
                     outgoingCapabilities = getStringSet("outgoingCapabilities")
                 )
             }
+
+        @JvmStatic
+        fun isValidIdentityPacket(identityPacket: NetworkPacket): Boolean = with(identityPacket) {
+            type == NetworkPacket.PACKET_TYPE_IDENTITY &&
+                    DeviceHelper.filterName(getString("deviceName", "")).isNotBlank() &&
+                    getString("deviceId", "").isNotBlank()
+        }
     }
 }
 
@@ -114,15 +123,25 @@ enum class DeviceType {
         }
 
     fun getIcon(context: Context) =
-        ContextCompat.getDrawable(context, toDrawableId())
+        ContextCompat.getDrawable(context, toDrawableId())!!
 
-    private fun toDrawableId() =
+    @DrawableRes
+    fun toDrawableId() =
         when (this) {
             PHONE -> R.drawable.ic_device_phone_32dp
             TABLET -> R.drawable.ic_device_tablet_32dp
             TV -> R.drawable.ic_device_tv_32dp
             LAPTOP -> R.drawable.ic_device_laptop_32dp
             else -> R.drawable.ic_device_desktop_32dp
+        }
+
+    fun toShortcutDrawableId() =
+        when (this) {
+            PHONE -> R.drawable.ic_device_phone_shortcut
+            TABLET -> R.drawable.ic_device_tablet_shortcut
+            TV -> R.drawable.ic_device_tv_shortcut
+            LAPTOP -> R.drawable.ic_device_laptop_shortcut
+            else -> R.drawable.ic_device_desktop_shortcut
         }
 
     companion object {

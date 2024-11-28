@@ -18,7 +18,7 @@
   <string name="pref_plugin_clipboard_sent">Вміст буфера надіслано</string>
   <string name="pref_plugin_mousepad">Дистанційне введення</string>
   <string name="pref_plugin_mousepad_desc">Скористайтеся телефоном або планшетом як замінником сенсорної панелі і клавіатури</string>
-  <string name="pref_plugin_presenter">Віддалений показ слайдів</string>
+  <string name="pref_plugin_presenter">Керування презентацією</string>
   <string name="pref_plugin_presenter_desc">Скористайтеся вашим пристроєм для того, щоб змінювати слайди у презентації</string>
   <string name="pref_plugin_remotekeyboard">Отримувати віддалені натискання клавіш</string>
   <string name="pref_plugin_remotekeyboard_desc">Отримувати події натискання клавіш з віддаленого пристрою</string>
@@ -52,6 +52,7 @@
   <string name="remotekeyboard_multiple_connections">Існує декілька з’єднань із віддаленою клавіатурою. Виберіть пристрій для налаштовування.</string>
   <string name="open_mousepad">Дистанційне введення</string>
   <string name="mousepad_info">Проведіть по екрану пальцем, щоб пересунути вказівник миші. Дотик одним пальцем означатиме клацання, дотиком двома або трьома пальцями можна імітувати праву і середню кнопки. Гортання відбувається за допомогою двох пальців. Для перетягування зі скиданням скористайтеся тривалим натисканням. Можливості гіроскопічного керування вказівником миші можна увімкнути у налаштуваннях додатка.</string>
+  <string name="mousepad_info_no_gestures">Пересувайте палець екраном, щоб пересунути вказівник миші; торкніться екрана для клацання.</string>
   <string name="mousepad_keyboard_input_not_supported">Підтримки введення з клавіатури на пов\'язаному пристрої не передбачено</string>
   <string name="mousepad_single_tap_settings_title">Встановлення дії для торкання одним пальцем</string>
   <string name="mousepad_double_tap_settings_title">Встановлення дії для торкання двома пальцями</string>
@@ -60,6 +61,7 @@
   <string name="mousepad_mouse_buttons_title">Показати кнопки миші</string>
   <string name="mousepad_acceleration_profile_settings_title">Встановити прискорення вказівника</string>
   <string name="mousepad_scroll_direction_title">Зворотний напрямок гортання</string>
+  <string name="mousepad_scroll_sensitivity_title">Чутливість до гортання</string>
   <string name="gyro_mouse_enabled_title">Увімкнути гіроскопічну мишу</string>
   <string name="gyro_mouse_sensitivity_title">Чутливість гіроскопа</string>
   <string-array name="mousepad_tap_entries">
@@ -116,11 +118,11 @@
   <string name="error_canceled_by_user">Скасовано користувачем</string>
   <string name="error_canceled_by_other_peer">Скасовано з іншого вузла пов’язування</string>
   <string name="encryption_info_title">Дані щодо шифрування</string>
-  <string name="encryption_info_msg_no_ssl">На сторонньому пристрої не використовується нова версія KDE Connect, у якій використовується застарілий спосіб шифрування.</string>
   <string name="my_device_fingerprint">Відбиток SHA256 сертифіката пристрою:</string>
   <string name="remote_device_fingerprint">Відбиток SHA256 сертифіката віддаленого пристрою:</string>
   <string name="pair_requested">Запит щодо пов’язування</string>
-  <string name="pairing_request_from">Запит щодо пов’язування від %1s</string>
+  <string name="pair_succeeded">Успішне пов’язування</string>
+  <string name="pairing_request_from">Запит щодо пов’язування від «%1s»</string>
   <plurals name="incoming_file_title">
     <item quantity="one">Отримуємо %1$d файл з %2$s</item>
     <item quantity="few">Отримуємо %1$d файли з %2$s</item>
@@ -173,6 +175,7 @@
   <string name="received_file_text">Натисніть, щоб відкрити «%1s»</string>
   <string name="cannot_create_file">Не вдалося створити файл %s</string>
   <string name="tap_to_answer">Натисніть, щоб відповісти</string>
+  <string name="left_click">Надіслати клацання лівою кнопкою</string>
   <string name="right_click">Надіслати клацання правою кнопкою</string>
   <string name="middle_click">Надіслати клацання лівою кнопкою</string>
   <string name="show_keyboard">Показати клавіатуру</string>
@@ -202,7 +205,9 @@
   <string name="mpris_notifications_explanation">Для показу віддалених носіїв даних на панелі сповіщень потрібні права доступу до сповіщень</string>
   <string name="mpris_notification_settings_title">Показувати сповіщення щодо керування відтворенням</string>
   <string name="mpris_notification_settings_summary">Уможливлює керування відтворенням мультимедійних даних без відкриття KDE Connect</string>
-  <string name="share_to">Використовувати спільно з…</string>
+  <string name="share_to">Оприлюднити на…</string>
+  <string name="unreachable_device">%s (недоступний)</string>
+  <string name="unreachable_device_url_share_text">Адреси, які оприлюднено на недоступному пристрої, буде надіслано, щойно пристрій стане доступним.\n\n</string>
   <string name="protocol_version_newer">На цьому пристрої використовується новіша версія протоколу</string>
   <string name="plugin_settings_with_name">Параметри %s</string>
   <string name="invalid_device_name">Некоректна назва пристрою</string>
@@ -279,7 +284,6 @@
   <string name="telephony_pref_blocked_title">Заблоковані номери</string>
   <string name="telephony_pref_blocked_dialog_desc">Не показувати виклики та SMS з цих номерів. Будь ласка, вказуйте кожен із номерів у окремому рядку.</string>
   <string name="mpris_coverart_description">Зображення обкладинки відтворюваних даних</string>
-  <string name="device_icon_description">Піктограма пристрою</string>
   <string name="settings_icon_description">Піктограма параметрів</string>
   <string name="presenter_fullscreen">На увесь екран</string>
   <string name="presenter_exit">Вийти з презентації</string>
@@ -338,6 +342,7 @@
   <string name="empty_trusted_networks_list_text">Вами ще не додано надійних мереж</string>
   <string name="allow_all_networks_text">Дозволити всі</string>
   <string name="location_permission_needed_title">Потрібні права доступу</string>
+  <string name="bluetooth_permission_needed_desc">KDE Connect потрібні права доступу до з\'єднання із сусідніми пристроями, щоб зробити пов\'язування пристроїв за допомогою Bluetooth доступним у KDE Connect.</string>
   <string name="location_permission_needed_desc">KDE Connect потрібні права на визначення місця перебування у фоновому режимі для роботи з мережею WiFi, з якою встановлено з\'єднання, навіть якщо програма працює у фоновому режимі. Причина полягає у тому, що назви сусідніх мереж WiFi може бути використано для визначення місця перебування, навіть якщо це не робить сама KDE Connect.</string>
   <string name="clipboard_android_x_incompat">У Android 10 вилучено доступ до буфера даних для усіх програм. Цей додаток буде вимкнено.</string>
   <string name="mpris_open_url">Продовжити відтворення тут</string>
@@ -401,6 +406,8 @@
   <string name="send_compose">Надіслати</string>
   <string name="compose_send_title">Надсилання редагованого</string>
   <string name="open_compose_send">Редагувати текст</string>
+  <string name="double_tap_to_drag">Подвійне торкання для перетягування</string>
+  <string name="hold_to_drag">Утримування для перетягування</string>
   <string name="about_kde_about">&lt;h1&gt;Інформація&lt;/h1&gt; &lt;p&gt;KDE — це всесвітня спільнота програмістів, художників, авторів текстів, перекладачів та фахівців з полегшення користування програмами, які роблять свій внесок до розвитку &lt;a href=https://www.gnu.org/philosophy/free-sw.html&gt;вільного програмного забезпечення&lt;/a&gt;. KDE створено стільничне середовище Плазма, сотні вільних програм і багато бібліотек, які є їхньою основою.&lt;/p&gt; &lt;p&gt;Розробка KDE є спільною працею, у якій жоден з учасників не має переважного контролю над зусиллями або результатами роботи інших розробників KDE. Ми працюємо разом заради спільної мети — створення найкращого вільного програмного забезпечення. Кожен може &lt;a href=https://community.kde.org/Get_Involved&gt;долучитися і зробити свій внесок&lt;/a&gt;, зокрема це можете зробити ви.&lt;/p&gt; Відвідайте сайт &lt;a href=https://www.kde.org/&gt;https://www.kde.org/&lt;/a&gt;, щоб дізнатися більше про спільноту KDE та створене нею програмне забезпечення.</string>
   <string name="about_kde_report_bugs_or_wishes">&lt;h1&gt;Повідомляйте про вади і ваші побажання&lt;/h1&gt; &lt;p&gt;Програмне забезпечення завжди потребує вдосконалення, і команда KDE готова це робити. Проте, вам (користувачеві) варто повідомити нам, якщо щось не працює, як слід, або щось можна покращити.&lt;/p&gt; &lt;p&gt;KDE має систему стеження за вадами. Завітайте на сторінку &lt;a href=https://bugs.kde.org/&gt;https://bugs.kde.org/&lt;/a&gt; , щоб повідомити розробників про ваду у програмі.&lt;/p&gt;Якщо у вас є пропозиція щодо вдосконалення, за допомогою цієї системи можна зареєструвати ваше побажання. Переконайтеся, що поле «Важливість» встановлено у значення «Список побажань» («Wishlist»).</string>
   <string name="about_kde_join_kde">&lt;h1&gt;Долучайтеся до KDE&lt;/h1&gt; &lt;p&gt;Не обов\'язково бути програмістом, щоб належати до Команди KDE. Можете приєднатися до команд, що перекладають інтерфейс програм. Можете забезпечувати користувачів графікою, темами, звуками та вдосконаленою документацію. Вам вирішувати!&lt;/p&gt; &lt;p&gt;Завітайте на сторінку &lt;a href=https://community.kde.org/Get_Involved&gt;https://community.kde.org/Get_Involved&lt;/a&gt; щодо інформації про деякі проєкти, у яких можна взяти участь.&lt;/p&gt;Якщо ви потребуєте більше інформації або документації, відвідайте &lt;a href=https://techbase.kde.org/&gt;https://techbase.kde.org/&lt;/a&gt;, щоб ознайомитися з нею.</string>
@@ -415,12 +422,18 @@
   <string name="maxim_leshchenko_task">Удосконалення інтерфейсу та ця інформаційна сторінка</string>
   <string name="holger_kaelberer_task">Додаток бездротової клавіатури та виправлення вад</string>
   <string name="saikrishna_arcot_task">Підтримка використання клавіатури у додатку віддаленого введення, виправлення вад і загальні удосконалення</string>
+  <string name="shellwen_chen_task">Удосконалення захисту SFTP, удосконалення можливості супроводу проєкту, виправлення вад і загальні удосконалення</string>
   <string name="everyone_else">Усім іншим, хто робив внесок до KDE Connect протягом років розробки</string>
   <string name="send_clipboard">Надіслати вміст буфера</string>
   <string name="tap_to_execute">Торкніться, щоб виконати</string>
   <string name="plugin_stats">Статистика щодо додатків</string>
   <string name="enable_udp_broadcast">Увімкнути виявлення пристроїв UDP</string>
+  <string name="enable_bluetooth">Увімкнути Bluetooth (тест)</string>
   <string name="receive_notifications_permission_explanation">Для отримання сповіщень з інших пристроїв має бути уможливлено показ сповіщень</string>
   <string name="findmyphone_notifications_explanation">Для уможливлення дзвінків, коли програма перебуває у фоновому режимі, потрібні права доступу до сповіщень</string>
   <string name="no_notifications">Показ сповіщень вимкнено, ви не отримуватимете сповіщень щодо вхідних запитів на пов\'язування пристроїв.</string>
+  <string name="mpris_keepwatching">Продовжити відтворення</string>
+  <string name="mpris_keepwatching_settings_title">Продовжити відтворення</string>
+  <string name="mpris_keepwatching_settings_summary">Показати беззвучне сповіщення для продовження відтворення на цьому пристрої після закриття носія</string>
+  <string name="notification_channel_keepwatching">Продовжити відтворення</string>
 </resources>
