@@ -38,7 +38,7 @@ public class MousePadPlugin extends Plugin {
     private final Callback callback;
 
     public MousePadPlugin() {
-        backgroundJobHandler = BackgroundJobHandler.newFixedThreadPoolBackgroundJobHander(1);
+        backgroundJobHandler = BackgroundJobHandler.newFixedThreadPoolBackgroundJobHandler(1);
         callback = new Callback();
     }
 
